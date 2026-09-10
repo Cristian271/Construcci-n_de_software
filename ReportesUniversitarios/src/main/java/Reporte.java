@@ -3,16 +3,16 @@ public class Reporte {
     private String equipo;
     private String ubicacion;
     private String descripcion;
-    private String prioridad;
-    private String estado;
+    private Prioridad prioridad;
+    private Estado estado;
 
     public Reporte(
             String identificador,
             String equipo,
             String ubicacion,
             String descripcion,
-            String prioridad,
-            String estado) {
+            Prioridad prioridad,
+            Estado estado) {
         this.identificador = identificador;
         this.equipo = equipo;
         this.ubicacion = ubicacion;
@@ -38,15 +38,15 @@ public class Reporte {
     }
 
 
-    public String getPrioridad() {
+    public Prioridad getPrioridad() {
         return prioridad;
     }
 
-    public String getEstado() {
+    public Estado getEstado() {
         return estado;
     }
 
-    public void setEstado(String nuevoEstado) {
+    public void setEstado(Estado nuevoEstado) {
         this.estado = nuevoEstado;
     }
 
