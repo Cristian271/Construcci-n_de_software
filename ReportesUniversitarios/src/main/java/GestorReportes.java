@@ -9,6 +9,7 @@ public class GestorReportes {
 
     public void agregarReporte(Reporte nuevoReporte){
         listaReportes.add(nuevoReporte);
+        nuevoReporte.setIdentificador("INC-"+ contador);
         contador++;
     }
 
