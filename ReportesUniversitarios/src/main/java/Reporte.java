@@ -7,13 +7,11 @@ public class Reporte {
     private Estado estado;
 
     public Reporte(
-            String identificador,
             String equipo,
             String ubicacion,
             String descripcion,
             Prioridad prioridad,
             Estado estado) {
-        this.identificador = identificador;
         this.equipo = equipo;
         this.ubicacion = ubicacion;
         this.descripcion = descripcion;
