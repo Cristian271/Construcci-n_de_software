@@ -27,8 +27,12 @@ public class GestorReportes {
     }
 
     public void imprimirReportes(){
-        for(Reporte reporte: listaReportes){
-            reporte.obtenerDetalle();
+        if(listaReportes == null || listaReportes.isEmpty()){
+            System.out.println("No hay incidencias registradas");
+        } else{
+            for(Reporte reporte: listaReportes){
+                System.out.println(reporte.obtenerDetalle());
+            }
         }
     }
 
