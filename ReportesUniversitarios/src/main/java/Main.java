@@ -33,7 +33,7 @@ public class Main {
                     MenusAccionesReportes.menuBuscarReporte(scanner, gestorReportes);
                     break;
                 case "3":
-                    MenusAccionesReportes.menuActualizarReporte(scanner, gestorReportes);
+                    MenusAccionesReportes.menuActualizarEstado(scanner, gestorReportes);
                     break;
                 case "4":
                     gestorReportes.imprimirReportes();

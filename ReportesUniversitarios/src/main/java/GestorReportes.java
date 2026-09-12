@@ -4,13 +4,13 @@ public class GestorReportes {
     private ArrayList<Reporte> listaReportes;
     private int contador = 0;
     public GestorReportes(){
-        listaReportes = new ArrayList<Reporte>();
+        listaReportes = new ArrayList();
     }
 
     public void agregarReporte(Reporte nuevoReporte){
-        listaReportes.add(nuevoReporte);
         nuevoReporte.setIdentificador("INC-"+ contador);
         contador++;
+        listaReportes.add(nuevoReporte);
     }
 
     public Reporte buscarReporte(String idBuscado){
@@ -22,8 +22,8 @@ public class GestorReportes {
         return null;
     }
 
-    public void actualizarEstado(Reporte reporteAcualizar, Estado nuevoEstado){
-        reporteAcualizar.setEstado(nuevoEstado);
+    public void actualizarEstado(Reporte reporteActualizar, Estado nuevoEstado){
+        reporteActualizar.setEstado(nuevoEstado);
     }
 
     public void imprimirReportes(){

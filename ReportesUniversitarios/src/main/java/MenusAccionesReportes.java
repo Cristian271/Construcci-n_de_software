@@ -84,7 +84,47 @@ public class MenusAccionesReportes {
             System.out.println("Por favor ingresa un id");
         }
     }
-    public static void menuActualizarReporte(Scanner scanner, GestorReportes gestor){
+    public static void menuActualizarEstado(Scanner scanner, GestorReportes gestor){
+        String idActualizar;
+        Reporte reporteActualizar;
+        Estado nuevoEstado = null;
+        int opcionEstado;
+        System.out.println("Ingrese Id de reporte a actualizar: ");
+        idActualizar = scanner.nextLine();
+        if (idActualizar != null){
+            reporteActualizar = gestor.buscarReporte(idActualizar);
+            if (reporteActualizar != null){
+                while (nuevoEstado == null){
+                    System.out.println("Selecciona el nuevo estado del reporte:");
+                    System.out.println("1. PENDIENTE");
+                    System.out.println("2. EN PROCESO");
+                    System.out.println("3. RESUELTA");
+                    System.out.print("Opción: ");
+
+                    opcionEstado= scanner.nextInt();
+                    scanner.nextLine();
+
+                    if (opcionEstado == 1) {
+                        nuevoEstado = Estado.PENDIENTE;
+                    } else if (opcionEstado == 2) {
+                        nuevoEstado = Estado.EN_PROCESO;
+                    } else if (opcionEstado == 3) {
+                        nuevoEstado = Estado.RESUELTA;
+                    } else {
+                        System.out.println("Opción inválida, elige del 1-3");
+                    }
+                }
+                gestor.actualizarEstado(reporteActualizar, nuevoEstado);
+                System.out.println("Estado actualizado con exito");
+            } else {
+                System.out.println("No existe reporte con el id ingresado");
+            }
+
+        } else {
+            System.out.println("Por favor ingresa un id");
+        }
+
+
 
     }
 }
