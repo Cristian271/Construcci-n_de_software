@@ -6,9 +6,7 @@ public class MenusAccionesReportes {
         String ubicacion = "";
         String descripcion = "";
         Prioridad prioridad = null;
-        Estado estado = null;
         int opcionPrioridad = 0;
-        int opcionEstado = 0;
 
 
         System.out.println("Ingrese el equipo a reportar");
@@ -109,8 +107,5 @@ public class MenusAccionesReportes {
         } else {
             System.out.println("Por favor ingresa un id");
         }
-
-
-
     }
 }
