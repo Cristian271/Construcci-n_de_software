@@ -10,13 +10,11 @@ public class Reporte {
             String equipo,
             String ubicacion,
             String descripcion,
-            Prioridad prioridad,
-            Estado estado) {
+            Prioridad prioridad) {
         this.equipo = equipo;
         this.ubicacion = ubicacion;
         this.descripcion = descripcion;
         this.prioridad = prioridad;
-        this.estado = estado;
     }
 
 

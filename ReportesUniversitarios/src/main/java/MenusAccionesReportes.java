@@ -43,28 +43,8 @@ public class MenusAccionesReportes {
             }
         }
 
-        while (estado == null){
-            System.out.println("Selecciona el estado del reporte:");
-            System.out.println("1. PENDIENTE");
-            System.out.println("2. EN PROCESO");
-            System.out.println("3. RESUELTA");
-            System.out.print("Opción: ");
 
-            opcionEstado= scanner.nextInt();
-            scanner.nextLine();
-
-            if (opcionEstado == 1) {
-                estado = Estado.PENDIENTE;
-            } else if (opcionEstado == 2) {
-                estado = Estado.EN_PROCESO;
-            } else if (opcionEstado == 3) {
-                estado = Estado.RESUELTA;
-            } else {
-                System.out.println("Opción inválida, elige del 1-3");
-            }
-        }
-
-        Reporte nuevoReporte = new Reporte(equipo, ubicacion, descripcion, prioridad, estado);
+        Reporte nuevoReporte = new Reporte(equipo, ubicacion, descripcion, prioridad);
         gestor.agregarReporte(nuevoReporte);
         System.out.println("Incidencia Registrada");
 
