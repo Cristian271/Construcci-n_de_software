@@ -67,37 +67,43 @@ public class MenusAccionesReportes {
     public static void menuActualizarEstado(Scanner scanner, GestorReportes gestor){
         String idActualizar;
         Reporte reporteActualizar;
-        Estado nuevoEstado = null;
-        int opcionEstado;
+        Estado nuevoEstado =  null;
+        int opcionEstado = 0;
         System.out.println("Ingrese Id de reporte a actualizar: ");
         idActualizar = scanner.nextLine();
         if (idActualizar != null){
             reporteActualizar = gestor.buscarReporte(idActualizar);
-            if (reporteActualizar != null){
-                while (nuevoEstado == null){
-                    System.out.println("Selecciona el nuevo estado del reporte:");
-                    System.out.println("1. PENDIENTE");
-                    System.out.println("2. EN PROCESO");
-                    System.out.println("3. RESUELTA");
-                    System.out.print("Opción: ");
-
-                    opcionEstado= scanner.nextInt();
-                    scanner.nextLine();
-
-                    if (opcionEstado == 1) {
-                        nuevoEstado = Estado.PENDIENTE;
-                    } else if (opcionEstado == 2) {
-                        nuevoEstado = Estado.EN_PROCESO;
-                    } else if (opcionEstado == 3) {
-                        nuevoEstado = Estado.RESUELTA;
-                    } else {
-                        System.out.println("Opción inválida, elige del 1-3");
+            if (reporteActualizar.getEstado()!= Estado.RESUELTA){
+                if (reporteActualizar.getPrioridad()== Prioridad.ALTA){
+                    if(reporteActualizar.getEstado()==Estado.PENDIENTE){
+                        reporteActualizar.setEstado(Estado.EN_PROCESO);
+                        System.out.println("Reporte en proceso");
+                    } else if(reporteActualizar.getEstado()== Estado.EN_PROCESO){
+                        reporteActualizar.setEstado(Estado.RESUELTA);
+                        System.out.println("Reporte resuelto");
                     }
+                } else {
+                    do {
+                        System.out.println("Elige el nuevo estado del reporte");
+                        System.out.println("1.- EN PROCESO");
+                        System.out.println("2.- RESUELTA");
+                        System.out.println("Opcion: ");
+                        opcionEstado = scanner.nextInt();
+                        scanner.nextLine();
+                        if (opcionEstado == 1) {
+                            nuevoEstado = Estado.EN_PROCESO;
+                        } else if (opcionEstado == 2) {
+                            nuevoEstado = Estado.RESUELTA;
+                        } else {
+                            System.out.println("Opción inválida, elige del 1-3");
+                        }
+                    } while (opcionEstado!=1 && opcionEstado!=2 );
+                    gestor.actualizarEstado(reporteActualizar, nuevoEstado);
+                    System.out.println("Estado actualizado con exito");
                 }
-                gestor.actualizarEstado(reporteActualizar, nuevoEstado);
-                System.out.println("Estado actualizado con exito");
+
             } else {
-                System.out.println("No existe reporte con el id ingresado");
+                System.out.println("Tu reporte ya fue resuelto");
             }
 
         } else {
