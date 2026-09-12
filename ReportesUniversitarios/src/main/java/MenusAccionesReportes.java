@@ -93,11 +93,11 @@ public class MenusAccionesReportes {
                         } else if (opcionEstado == 2) {
                             nuevoEstado = Estado.RESUELTA;
                         } else {
-                            System.out.println("Opción inválida, elige del 1-3");
+                            System.out.println("Opción inválida, elige del 1-2");
                         }
                     } while (opcionEstado!=1 && opcionEstado!=2 );
                     gestor.actualizarEstado(reporteActualizar, nuevoEstado);
-                    System.out.println("Estado actualizado con exito");
+                    System.out.println("Estado actualizado con éxito");
                 }
 
             } else {
