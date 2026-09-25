@@ -136,10 +136,10 @@ public class Main {
             option = scanner.nextInt();
             if (option >= 1 && option <= 4) {
                 System.out.println("ID de Pila (numero de 0 a " + (pilas.length - 1) + "): ");
-                int p = scanner.nextInt();
-                //introduce explaining variable
+                //refact: introduce explaining variable p -> idPila en subMenu2 y inspect
+                int idPila = scanner.nextInt();
                 scanner.nextLine();
-                if (p < 0 || p >= pilas.length) {
+                if (idPila < 0 || idPila >= pilas.length) {
                     System.out.println("Pila no valida");
                     continue;
                 }
@@ -149,7 +149,7 @@ public class Main {
                     case 1:
                         System.out.println("ID del nuevo contenedor: ");
                         String idC = scanner.nextLine();
-                        pilas[p].push(new Container(idC));
+                        pilas[idPila].push(new Container(idC));
                         break;
                     case 2:
                         if (route.isEmpty()) {
@@ -158,7 +158,7 @@ public class Main {
                         }
                         System.out.println("ID del contenedor a retirar");
                         String idS = scanner.nextLine();
-                        Container popped = pilas[p].popContainer(idS);
+                        Container popped = pilas[idPila].popContainer(idS);
                         if (popped == null){
                             System.out.println("No se encontró el contenedor con el id: "+ idS);
                         } else {
@@ -177,12 +177,12 @@ public class Main {
 
                         break;
                     case 3:
-                        if (!pilas[p].isEmpty()) {
-                            System.out.println("Tope actual: " + pilas[p].top().getId());
+                        if (!pilas[idPila].isEmpty()) {
+                            System.out.println("Tope actual: " + pilas[idPila].top().getId());
                         }
                         break;
                     case 4:
-                        inspect(p);
+                        inspect(idPila);
                         break;
                     default:
                         System.out.println("Opción no válida.");
@@ -197,8 +197,8 @@ public class Main {
     Se trata de la descripción de los productos de contenedores mediante el uso de listas simplemente ligadas.
      Funcion que inspecciona cualquier contendor de la pila
     */
-    private static void inspect(int p) {
-        if (pilas[p].isEmpty()) {
+    private static void inspect(int idPila) {
+        if (pilas[idPila].isEmpty()) {
             System.out.println("No hay nada para inspeccionar en esta pila.");
             return;
         }
@@ -207,7 +207,7 @@ public class Main {
         String id = scanner.nextLine();
 
         // Buscar contenedor sin alterar la pila
-        Container actual = pilas[p].top();
+        Container actual = pilas[idPila].top();
         while (actual != null && !actual.getId().equals(id)) {
             actual = actual.getNext();
         }
