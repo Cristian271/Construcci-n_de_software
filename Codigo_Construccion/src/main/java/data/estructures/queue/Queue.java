@@ -11,6 +11,4 @@ public interface Queue {
     public int size();
     //Devuelve información del primer elemento de la lista
     public BusQueue front();
-    //Verifica si la lista tiene elementos o está vacía
-    public boolean isEmpty();
 }

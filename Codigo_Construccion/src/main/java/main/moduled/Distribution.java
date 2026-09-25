@@ -14,7 +14,7 @@ public class Distribution extends DoubleList {
      Si la pila está vacía inserta el elemento como inicio y final, si no lo inserta al final actualizando la etiqueta end*/
     @Override
     public void insertEnd(String nameStop) {
-        if(isEmpty()){
+        if(start==null){
             start = end = new StopBus(nameStop);
             position = start;
             cont++;
@@ -81,7 +81,7 @@ public class Distribution extends DoubleList {
     @Override
     public String deleteStop(String name) {
         String deleted = null;
-        if(isEmpty()){
+        if(start==null){
             System.out.println("No hay paradas registradas");
         } else {
             StopBus current = start;
@@ -156,13 +156,6 @@ public class Distribution extends DoubleList {
         return start;
     }
 
-
-    /** Sin recibir datos, retorna un boolean que indica si la fila se encuentra vacía */
-    @Override
-    public boolean isEmpty() {
-        return start == null;
-    }
-    //Inline Method
     /** No recibe datos, solo se encarga de retornar un enetero con el número de paradas que se encuentran registradas en la lista*/
     public int getCont() {
         return cont;

@@ -20,7 +20,7 @@ public class Reception extends QueueDoubleList {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Ingresa el ID del camión: ");
         String nameBus = scanner.nextLine();
-        if(isEmpty()){
+        if(cont==0){
             start = end = new BusQueue(nameBus); cont++;
         } else{
             BusQueue temp = new BusQueue(nameBus, end, null); cont++;
@@ -36,8 +36,8 @@ public class Reception extends QueueDoubleList {
     @Override
     public BusQueue dequeue() {
         BusQueue deleted = null;
-        if(isEmpty() || cont == 1){
-            if(isEmpty()) {
+        if(cont == 0 || cont == 1){
+            if(cont == 0) {
                 System.out.println("La cola esta vacía");
             } else{
                 start = end = null;
@@ -63,11 +63,6 @@ public class Reception extends QueueDoubleList {
     @Override
     public BusQueue front() {
         return start;
-    }
-    /** Sin parametros de entrada, retorna true si la cola se encuentra vacía, o al contrario false */
-    @Override
-    public boolean isEmpty() {
-        return cont == 0;
     }
     /** Funciones sin entrada ni salida, se encarga unicamente de mostrar las opciones del modulo */
     public static void menu(){

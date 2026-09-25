@@ -16,7 +16,7 @@ public class Yard extends ContainerSimpleList{
     // substitute algorithm
     @Override
     public Container popContainer(String id) {
-        if (isEmpty()) {
+        if (start==null) {
             System.out.println("El patio está vacío");
             return null;
         }
@@ -24,7 +24,7 @@ public class Yard extends ContainerSimpleList{
         Container auxiliar = null; // pila manual
         Container popped = null;
 
-        while (!isEmpty()) {
+        while (start != null) {
             Container current = pop();
             if (current.getId().equals(id)) {
                 popped = current;
@@ -54,7 +54,7 @@ public class Yard extends ContainerSimpleList{
             System.out.println("Columna de contenedores llena; (máximo: "+ limit +")");
             return;
         }
-        if (isEmpty()){
+        if (start == null){
             start = end = container;
         } else {
             container.setNext(start);
@@ -67,7 +67,7 @@ public class Yard extends ContainerSimpleList{
      Verifica si esta vacía, si no lo está eliminado el elemento maracado como start y actauliza las etiquetas */
     @Override
     public Container pop() {
-        if (isEmpty()) {
+        if (start == null) {
             System.out.println("El patio está vacío.");
             return null;
         }
@@ -89,11 +89,6 @@ public class Yard extends ContainerSimpleList{
     @Override
     public int size() {
         return count;
-    }
-    /** Sin recibir datos de entrada devuelve un entero que indica si la pila está vacía o contiene elementos*/
-    @Override
-    public boolean isEmpty() {
-        return start == null;
     }
     /** No recibe datos de entrada pero se encarga de regresar un float con el resultado del proceso de calcular la suma total del peso de los elementos de la pila */
     public float calculateTotalStackWeight() {

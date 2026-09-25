@@ -21,9 +21,6 @@ public abstract class DoubleList {
     //Sin parametros de entrada o salida, se encarga de avanzar al elemento anterior en la lista
     public abstract void goBack();
 
-    //Sin parametros de entrada, se encarga de verificar si la lista carece de elementos y retorna true o false según el caso
-    public abstract boolean isEmpty();
-
     //Sin parametros de entrada o salida, se encarga de mostrar la información de los elementos en el orden en que se encuentran alamacenados en la lista
     // fue muy util para debuggear, pero termino sin uso, lo dejamos como evidencia
     public void imprimir(){

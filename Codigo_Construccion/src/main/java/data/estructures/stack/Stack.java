@@ -11,6 +11,4 @@ public interface Stack {
     public Container top();
     //Retorna elo tamaño de la pila
     public int size();
-    //Verifica si la pila tiene elementos
-    public boolean isEmpty();
 }

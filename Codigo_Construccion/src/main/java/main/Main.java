@@ -104,7 +104,7 @@ public class Main {
                     }
                     break;
                 case 3:
-                    if (!busQueue.isEmpty()) {
+                    if (busQueue.size()>0) {
                         System.out.println("Siguiente: " + busQueue.front().getNameBus());
                     } else {
                         System.out.println("No hay camiones en espera");
@@ -152,7 +152,7 @@ public class Main {
                         pilas[idPila].push(new Container(idC));
                         break;
                     case 2:
-                        if (route.isEmpty()) {
+                        if (route.getCont() == 0) {
                             System.out.println("No hay paradas creadas. Cree ruta primero.");
                             break;
                         }
@@ -177,7 +177,7 @@ public class Main {
 
                         break;
                     case 3:
-                        if (!pilas[idPila].isEmpty()) {
+                        if (pilas[idPila].size()>0) {
                             System.out.println("Tope actual: " + pilas[idPila].top().getId());
                         }
                         break;
@@ -198,7 +198,7 @@ public class Main {
      Funcion que inspecciona cualquier contendor de la pila
     */
     private static void inspect(int idPila) {
-        if (pilas[idPila].isEmpty()) {
+        if (pilas[idPila].size() == 0) {
             System.out.println("No hay nada para inspeccionar en esta pila.");
             return;
         }
@@ -273,7 +273,7 @@ public class Main {
                     route.deleteStop(scanner.nextLine());
                     break;
                 case 4:
-                    if (route.isEmpty()) {
+                    if (route.getCont() == 0) {
                         System.out.println("No hay paradas en la ruta para simular.");
                     } else {
                         System.out.println("Ingrese el id del contenedor que se encuentra en ruta para simular su recorrido");
@@ -315,7 +315,7 @@ public class Main {
     private static void showGeneralReport() {
         System.out.println("\n[ESTADO DE RECEPCIÓN]:");
         System.out.println(">> Camiones en espera: " + busQueue.size());
-        if (!busQueue.isEmpty()) {
+        if (busQueue.size()>0) {
             System.out.println(">> Próximo en turno: " + busQueue.front().getNameBus());
         }
 
