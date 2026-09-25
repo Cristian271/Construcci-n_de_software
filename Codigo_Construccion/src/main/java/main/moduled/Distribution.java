@@ -124,8 +124,7 @@ public class Distribution extends DoubleList {
         if (position == null) {
             return "Sin paradas configuradas";
         }
-        String nombreParada = position.getNameStop();
-        return nombreParada;
+        return position.getNameStop();
     }
 
 

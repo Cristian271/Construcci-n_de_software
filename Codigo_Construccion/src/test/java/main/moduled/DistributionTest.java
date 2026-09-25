@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DistributionTest {
+    //  PRUEBAS PARA METODO INSERTBEETWEEN
 
     // ============================================================
     // CASO 1
@@ -484,5 +485,151 @@ class DistributionTest {
         assertEquals(dNode, x.getNext());
         assertEquals(e, dNode.getNext());
         assertNull(e.getNext());
+    }
+
+
+
+    // PRUEBAS PARA METODO SHOWCURRENTSTOP
+    // ============================================================
+    // CASO 1
+    // No hay paradas insertadas
+    // ============================================================
+    @Test
+    void caso1_showCurrentStop_SinParadas() {
+        Distribution distribution = new Distribution();
+        assertEquals("Sin paradas configuradas", distribution.showCurrentStop());
+    }
+    // ============================================================
+    // CASO 2
+    // Insertando la primera parada
+    // ============================================================
+
+    @Test
+    void caso2_showCurrentStop_UnaParada() {
+        Distribution distribution = new Distribution();
+        distribution.insertEnd("Estación Central");
+        assertEquals("Estación Central", distribution.showCurrentStop());
+    }
+    // ============================================================
+    // CASO 3
+    // Parada permanece en la primera, aun despues de insertar paradas
+    // ============================================================
+
+    @Test
+    void caso3_showCurrentStop_Parada1DespuesVariasParadas() {
+        Distribution distribution = new Distribution();
+        distribution.insertEnd("Parada A");
+        distribution.insertEnd("Parada B");
+        distribution.insertEnd("Parada C");
+
+        assertEquals("Parada A", distribution.showCurrentStop());
+    }
+    // ============================================================
+    // CASO 4
+    // Parada, despues de ir a la siguiente parada en la lista
+    // ============================================================
+
+    @Test
+    void caso4_ShowCurrentStop_GoNext() {
+        Distribution distribution = new Distribution();
+        distribution.insertEnd("Parada A");
+        distribution.insertEnd("Parada B");
+
+        distribution.goNext();
+
+        assertEquals("Parada B", distribution.showCurrentStop());
+    }
+    // ============================================================
+    // CASO 5
+    // Parada, despues de regresar a la anterior parada en la lista
+    // ============================================================
+
+    @Test
+    void caso5_ShowCurrentStop_GoBack() {
+        Distribution distribution = new Distribution();
+        distribution.insertEnd("Parada A");
+        distribution.insertEnd("Parada B");
+
+        distribution.goNext();
+        distribution.goBack();
+
+        assertEquals("Parada A", distribution.showCurrentStop());
+    }
+    // ============================================================
+    // CASO 6
+    // Parada actual no debe salir del maximo (la ultima parada)
+    // ============================================================
+
+    @Test
+    void caso6_ShowCurrentStop_DentroLimiteFinal() {
+        Distribution distribution = new Distribution();
+        distribution.insertEnd("Parada A");
+        distribution.insertEnd("Parada B");
+
+        distribution.goNext(); // posicion final en B
+        distribution.goNext(); // tratar de seguir
+
+        assertEquals("Parada B", distribution.showCurrentStop());
+    }
+    // ============================================================
+    // CASO 7
+    // Parada actual no debe salir del maximo (primera parada)
+    // ============================================================
+
+    @Test
+    void caso7_ShowCurrentStop_DentroLimiteInicio() {
+        Distribution distribution = new Distribution();
+        distribution.insertEnd("Parada A");
+        distribution.insertEnd("Parada B");
+
+        distribution.goBack(); //  tratar de retroceder
+
+        assertEquals("Parada A", distribution.showCurrentStop());
+    }
+    // ============================================================
+    // CASO 8
+    // Al eliminarse una parada, la actual es la siguiente
+    // ============================================================
+
+    @Test
+    void caso8_ShowCurrentStop_ParadaEliminada() {
+        Distribution distribution = new Distribution();
+        distribution.insertEnd("Parada A");
+        distribution.insertEnd("Parada B");
+        distribution.insertEnd("Parada C");
+
+        distribution.goNext(); // posicion en B
+        distribution.deleteStop("Parada B"); // al borrar B , pasa a C
+
+        assertEquals("Parada C", distribution.showCurrentStop());
+    }
+    // ============================================================
+    // CASO 9
+    // Al eliminarse una parada que es unica, debe mostrar que no hay
+    // ============================================================
+
+    @Test
+    void caso9_ShowCurrentStop_ParadaUnicaEliminada() {
+        Distribution distribution = new Distribution();
+        distribution.insertEnd("Parada Unica");
+        distribution.deleteStop("Parada Unica");
+
+        assertEquals("Sin paradas configuradas", distribution.showCurrentStop());
+    }
+    // ============================================================
+    // CASO 10
+    // Al usar insertbetween, la parada actual debe conservarse en el inicio
+    // ============================================================
+
+    @Test
+    void caso10_ShowCurrentStop_InsertBetween() {
+        Distribution distribution = new Distribution();
+        distribution.insertEnd("Parada A");
+        distribution.insertEnd("Parada C");
+
+        // position está en Parada A
+        distribution.insertBetween("Parada A", "Parada C", "Parada B");
+
+        assertEquals("Parada A", distribution.showCurrentStop());
     }
 }
