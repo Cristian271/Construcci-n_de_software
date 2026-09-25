@@ -632,4 +632,65 @@ class DistributionTest {
 
         assertEquals("Parada A", distribution.showCurrentStop());
     }
+
+    //PRUEBAS PARA METODO ISEMPTY
+    // ============================================================
+    // CASO 1
+    // Lista vacía.
+    // ============================================================
+    @Test
+    void caso01_listaVacia() {
+        Distribution d = new Distribution();
+
+        d.insertBetween("A", "B", "X");
+
+        assertTrue(d.isEmpty());
+        assertEquals(0, d.getCont());
+        assertNull(d.firstStopBus());
+    }
+
+    // ============================================================
+    // CASO 2
+    // Solo existe una parada.
+    // ============================================================
+    @Test
+    void caso02_unaSolaParada() {
+        Distribution d = new Distribution();
+
+        d.insertEnd("A");
+
+        d.insertBetween("A", "B", "X");
+
+        assertEquals(1, d.getCont());
+        assertEquals("A", d.firstStopBus().getNameStop());
+        assertNull(d.firstStopBus().getNext());
+    }
+
+    // ============================================================
+    // CASO 3
+    // No hay paradas configuradas al inicio.
+    // ============================================================
+    @Test
+    void caso03_showCurrentStopSinParadas() {
+        Distribution d = new Distribution();
+
+        assertEquals("Sin paradas configuradas", d.showCurrentStop());
+    }
+
+    // ============================================================
+    // CASO 4
+    // Al eliminarse una parada que es única, la lista queda vacía.
+    // ============================================================
+    @Test
+    void caso04_ShowCurrentStop_ParadaUnicaEliminada() {
+        Distribution d = new Distribution();
+
+        d.insertEnd("Parada Unica");
+        d.deleteStop("Parada Unica");
+
+        assertTrue(d.isEmpty());
+        assertEquals(0, d.getCont());
+        assertNull(d.firstStopBus());
+        assertEquals("Sin paradas configuradas", d.showCurrentStop());
+    }
 }
