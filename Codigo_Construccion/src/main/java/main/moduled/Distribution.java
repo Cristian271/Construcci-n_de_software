@@ -31,60 +31,51 @@ public class Distribution extends DoubleList {
      en caso contrario notifica que no se pudo realizar la acción*/
     @Override
     public void insertBetween(String one, String two, String nameStop) {
-        if(isEmpty() || cont <= 1){
+
+        if (cont <= 1) {
             System.out.println("No hay suficientes paradas");
-        } else{
-            StopBus current = start;
-            int who = -1; // 1 -> Encontró al nodo uno primero; 2 -> encontró al nodo dos primero
-            while(current!=null){
-                if(current.getNameStop().equals(one)){
-                    who = 1;
-                    break;
-                } else if(current.getNameStop().equals(two)){
-                    who = 2;
-                    break;
-                }
-                current = current.getNext();
-            }
-
-            switch (who){
-                case -1:
-                    System.out.println("No se pudo añadir la parada, error en alguno de los datos");
-                    break;
-                case 1:
-                    if(current.getNext()!=null && current.getNext().getNameStop().equals(two)){
-                        StopBus temp = new StopBus(nameStop, current, current.getNext());
-                        current.getNext().setPrevious(temp);
-                        current.setNext(temp);
-                        cont++;
-                    } else if(current.getPrevious() != null && current.getPrevious().getNameStop().equals(two)){
-                        StopBus temp = new StopBus(nameStop, current.getPrevious(), current);
-                        current.getPrevious().setNext(temp);
-                        current.setPrevious(temp);
-                        cont++;
-                    } else{
-                        System.out.println("No se pudo añadir, error en el nombre de la parada 2");
-                    }
-                    break;
-                case 2:
-                    if(current.getNext() != null && current.getNext().getNameStop().equals(one)){
-                        StopBus temp = new StopBus(nameStop, current, current.getNext());
-                        current.getNext().setPrevious(temp);
-                        current.setNext(temp);
-                        cont++;
-                    } else if(current.getPrevious() != null && current.getPrevious().getNameStop().equals(one)){
-                        StopBus temp = new StopBus(nameStop, current.getPrevious(), current);
-                        current.getPrevious().setNext(temp);
-                        current.setPrevious(temp);
-                        cont++;
-                    } else{
-                        System.out.println("No se pudo añadir, error en el nombre de la parada 1");
-                    }
-
-            }
-
+            return;
         }
+        // Buscar la primera parada
+        StopBus current = start;
+        while (current != null && !current.getNameStop().equals(one)) {
+            current = current.getNext();
+        }
+        // No se encontró la primera parada
+        if (current == null) {
+            System.out.println("No existe la parada " + one);
+            return;
+        }
+        StopBus next = current.getNext();
+        StopBus previous = current.getPrevious();
+
+        // Comprobar si la segunda parada está después
+        boolean twoIsNext = next != null &&
+                next.getNameStop().equals(two);
+
+        // Comprobar si la segunda parada está antes
+        boolean twoIsPrevious = previous != null &&
+                previous.getNameStop().equals(two);
+
+        // La segunda parada está después de la actual
+        if (twoIsNext) {
+            StopBus newStop = new StopBus(nameStop, current, next);
+            current.setNext(newStop);
+            next.setPrevious(newStop);
+            cont++;
+            return;
+        }
+
+        if (twoIsPrevious) {
+            StopBus newStop = new StopBus(nameStop, previous, current);
+            previous.setNext(newStop);
+            current.setPrevious(newStop);
+            cont++;
+            return;
+        }
+        System.out.println("No se pudo añadir la parada");
     }
+
     /** Recibiendo el identificador de una parada intenta buscarla dentro de la lista, si la encuentra lo que hace
      es eliminarla y retornar un string con el identificador de la parada que fue eliminada*/
     @Override
