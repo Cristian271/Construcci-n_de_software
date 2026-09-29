@@ -245,7 +245,6 @@ public class Main {
     }
 
     /**Este submenu es el encargado de gestionar la distribución, es decir, crear paradas, eliminar paradas y simular rutas*/
-    //
     private static void subMenu3() {
         int option;
         do {
@@ -255,59 +254,79 @@ public class Main {
             scanner.nextLine();
             switch (option) {
                 case 1:
-                    System.out.println("Escriba el nombre de la nueva parada: ");
-                    route.insertEnd(scanner.nextLine());
+                    agregarParadaFinal();
                     break;
                 case 2:
-                    System.out.println("A continuación, escriba las paradas entre las que se quiere insertar ");
-                    System.out.println("Parada 1: ");
-                    String stop1 = scanner.nextLine();
-                    System.out.println("Parada 2: ");
-                    String stop2 = scanner.nextLine();
-                    System.out.println("Nueva parada intermedia: ");
-                    String newStop = scanner.nextLine();
-                    route.insertBetween(stop1, stop2, newStop);
+                    insertarParadaIntermedia();
                     break;
                 case 3:
-                    System.out.println("Nombre de parada a cancelar: ");
-                    route.deleteStop(scanner.nextLine());
+                    cancelarParada();
                     break;
                 case 4:
-                    if (route.getCont() == 0) {
-                        System.out.println("No hay paradas en la ruta para simular.");
-                    } else {
-                        System.out.println("Ingrese el id del contenedor que se encuentra en ruta para simular su recorrido");
-                        String idtemp = scanner.nextLine();
-                        boolean encontrado = false;
-                        Container current = start;
-                        if(start == null){
-                            System.out.println("No hay contenedores en ruta");
-                            return;
-                        }
-
-                        while(current != null){
-                            if(current.getId().equals(idtemp)){
-                                encontrado = true;
-                                break;
-                            }
-                            current = current.getNext();
-                        }
-                        if(encontrado){
-                            simulateRoute(current);
-                        } else{
-                            System.out.println("No se puedo localizar el contenedor, asegurese que los datos esten correctos");
-                        }
-
-                    }
+                    iniciarSimulacionRuta();
                     break;
                 case 5:
                     System.out.println("Volviendo ... ");
+                    break;
                 default:
                     System.out.println("Opción no válida.");
                     break;
             }
         } while (option != 5);
     }
+
+    private static void agregarParadaFinal() {
+        System.out.println("Escriba el nombre de la nueva parada: ");
+        route.insertEnd(scanner.nextLine());
+    }
+
+    private static void insertarParadaIntermedia() {
+        System.out.println("A continuación, escriba las paradas entre las que se quiere insertar ");
+        System.out.println("Parada 1: ");
+        String stop1 = scanner.nextLine();
+        System.out.println("Parada 2: ");
+        String stop2 = scanner.nextLine();
+        System.out.println("Nueva parada intermedia: ");
+        String newStop = scanner.nextLine();
+        route.insertBetween(stop1, stop2, newStop);
+    }
+
+    private static void cancelarParada() {
+        System.out.println("Nombre de parada a cancelar: ");
+        route.deleteStop(scanner.nextLine());
+    }
+
+    private static void iniciarSimulacionRuta() {
+        if (route.getCont() == 0) {
+            System.out.println("No hay paradas en la ruta para simular.");
+            return;
+        }
+
+        if (start == null) {
+            System.out.println("No hay contenedores en ruta");
+            return;
+        }
+
+        System.out.println("Ingrese el id del contenedor que se encuentra en ruta para simular su recorrido");
+        String idtemp = scanner.nextLine();
+
+        Container current = start;
+        boolean encontrado = false;
+        while (current != null) {
+            if (current.getId().equals(idtemp)) {
+                encontrado = true;
+                break;
+            }
+            current = current.getNext();
+        }
+
+        if (encontrado) {
+            simulateRoute(current);
+        } else {
+            System.out.println("No se puedo localizar el contenedor, asegurese que los datos esten correctos");
+        }
+    }
+
 
     /** Función que se despliega la información del cuarto módulo (D), reporte general.
     No tiene entradas, solo muestra el estado de los camiones (colas), el inventario (pilas) y las rutas.
