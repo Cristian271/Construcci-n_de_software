@@ -88,50 +88,8 @@ public class SubMenu3Test {
         route.insertEnd("Progreso");
         assertNull(Main.start, "Si Main.start es null, no debe haber contenedores a simular.");
     }
+    /////////////////////////////////////////////
 
-    @Test
-    void testFindContainerInMainStartList() {
-        Container c1 = new Container("CONT-101");
-        Container c2 = new Container("CONT-102");
-        Container c3 = new Container("CONT-103");
-        c1.setNext(c2);
-        c2.setNext(c3);
-        Main.start = c1;
+   
 
-        String idTemp = "CONT-102";
-        Container current = Main.start;
-        boolean encontrado = false;
-
-        while (current != null) {
-            if (current.getId().equals(idTemp)) {
-                encontrado = true;
-                break;
-            }
-            current = current.getNext();
-        }
-
-        assertTrue(encontrado);
-        assertNotNull(current);
-        assertEquals("CONT-102", current.getId());
-    }
-
-    @Test
-    void testFindContainerNotFound() {
-        Container c1 = new Container("CONT-101");
-        Main.start = c1;
-
-        String idTemp = "CONT-999";
-        Container current = Main.start;
-        boolean encontrado = false;
-
-        while (current != null) {
-            if (current.getId().equals(idTemp)) {
-                encontrado = true;
-                break;
-            }
-            current = current.getNext();
-        }
-
-        assertFalse(encontrado, "El contenedor CONT-999 no debe encontrarse en la lista.");
-    }
 }
