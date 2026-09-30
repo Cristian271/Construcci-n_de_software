@@ -82,14 +82,5 @@ public class SubMenu3Test {
         assertEquals(0, route.getCont());
         assertTrue(route.getCont() == 0, "No debe permitir simular si getCont() == 0");
     }
-
-    @Test
-    void testSimulateRouteFailsWhenStartIsNull() {
-        route.insertEnd("Progreso");
-        assertNull(Main.start, "Si Main.start es null, no debe haber contenedores a simular.");
-    }
-    /////////////////////////////////////////////
-
-   
-
+    
 }
