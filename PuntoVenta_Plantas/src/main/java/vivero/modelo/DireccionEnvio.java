@@ -1,0 +1,31 @@
+package vivero.modelo;
+
+public class DireccionEnvio {
+    private String calle;
+    private String numero;
+    private String ciudad;
+    private String codigoPostal;
+
+    public DireccionEnvio(String calle, String numero, String ciudad, String codigoPostal) {
+        this.calle = calle;
+        this.numero = numero;
+        this.ciudad = ciudad;
+        this.codigoPostal = codigoPostal;
+    }
+
+    public String getCalle() {
+        return calle;
+    }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public String getCiudad() {
+        return ciudad;
+    }
+
+    public String getCodigoPostal() {
+        return codigoPostal;
+    }
+}
