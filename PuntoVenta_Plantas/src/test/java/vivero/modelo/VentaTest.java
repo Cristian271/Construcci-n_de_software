@@ -6,8 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class VentaTest {
 
@@ -121,5 +120,51 @@ class VentaTest {
         // Assert
         assertTrue(resultado, "El pago con dinero de más debe ser aprobado.");
         assertTrue(venta.isPagada());
+    }
+    /*-----------------------------------------CALCULAR ENVIO-------------------------------------------------*/
+
+    @Test
+    public void calcularEnvio_ValoresEstandar_CalculaCostoCorrectamente() {
+        // 1. Preparación
+        Venta venta = new Venta("V-01", null, LocalDate.now());
+
+        // 2. Ejecución
+        // Volumen = 10.0 * 10.0 * 10.0 = 1000.0
+        // Distancia = 5.0
+        // Fórmula: (5.0 * 3.5) + (1000.0 * 0.02) = 17.5 + 20.0 = 37.5
+        double costoEnvio = venta.calcularEnvio(10.0, 10.0, 10.0, 5.0);
+
+        // 3. Verificación
+        assertEquals(37.5, costoEnvio, 0.001, "El costo de envío con valores estándar no es el esperado");
+    }
+
+    @Test
+    public void calcularEnvio_DistanciaCero_CalculaSoloCostoPorVolumen() {
+        // 1. Preparación
+        Venta venta = new Venta("V-02", null, LocalDate.now());
+
+        // 2. Ejecución
+        // Volumen = 20.0 * 5.0 * 10.0 = 1000.0
+        // Distancia = 0.0 (ej. recogida local o el mismo punto)
+        // Fórmula: (0.0 * 3.5) + (1000.0 * 0.02) = 0.0 + 20.0 = 20.0
+        double costoEnvio = venta.calcularEnvio(20.0, 5.0, 10.0, 0.0);
+
+        // 3. Verificación
+        assertEquals(20.0, costoEnvio, 0.001, "Si la distancia es 0, el costo debe basarse únicamente en la tarifa por volumen");
+    }
+
+    @Test
+    public void calcularEnvio_VolumenPequenoLargaDistancia_CalculaCostoCorrectamente() {
+        // 1. Preparación
+        Venta venta = new Venta("V-03", null, LocalDate.now());
+
+        // 2. Ejecución
+        // Volumen = 1.0 * 1.0 * 1.0 = 1.0
+        // Distancia = 100.0
+        // Fórmula: (100.0 * 3.5) + (1.0 * 0.02) = 350.0 + 0.02 = 350.02
+        double costoEnvio = venta.calcularEnvio(1.0, 1.0, 1.0, 100.0);
+
+        // 3. Verificación
+        assertEquals(350.02, costoEnvio, 0.001, "El costo para un paquete pequeño a larga distancia no se calculó correctamente");
     }
 }
