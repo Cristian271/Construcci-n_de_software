@@ -9,6 +9,50 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
 class VentaTest {
+    /*----------------CALCULO DESCUENTO / R-01 REPLACE TEMP WITH QUERY (calcularDescuentoTotal) ----------------------------------*/
+
+    @Test
+    public void calcularDescuentoTotal_PrecioBaseMayorAMil_AplicaDiezPorCientoDescuento() {
+        // 1. Preparación
+        Venta venta = new Venta("V-16", null, LocalDate.now());
+        // Cantidad = 3, Precio = $400.0 -> Precio Base = $1200.0 (Mayor a $1000.0)
+        // Descuento aplicable: 10% -> Total = 1200.0 * 0.90 = $1080.0
+
+        // 2. Ejecución
+        double resultado = venta.calcularDescuentoTotal(3, 400.0);
+        // double resultado = venta.calcularDescuentoTotalRefactorizado(3, 400.0); // DESPUÉS DE REFACTORIZAR (usando método basePrice())
+
+        // 3. Verificación
+        assertEquals(1080.0, resultado, 0.001, "Para precios bases superiores a $1000.0 debe aplicar un descuento del 10%");
+    }
+
+    @Test
+    public void calcularDescuentoTotal_PrecioBaseMenorOIgualAMil_AplicaCincoPorCientoDescuento() {
+        // 1. Preparación
+        Venta venta = new Venta("V-17", null, LocalDate.now());
+        // Cantidad = 2, Precio = $250.0 -> Precio Base = $500.0 (Menor a $1000.0)
+        // Descuento aplicable: 5% -> Total = 500.0 * 0.95 = $475.0
+
+        // 2. Ejecución
+        double resultado = venta.calcularDescuentoTotal(2, 250.0);
+
+        // 3. Verificación
+        assertEquals(475.0, resultado, 0.001, "Para precios bases menores o iguales a $1000.0 debe aplicar un descuento del 5%");
+    }
+
+    @Test
+    public void calcularDescuentoTotal_PrecioBaseLimiteExactoMil_AplicaCincoPorCientoDescuento() {
+        // 1. Preparación
+        Venta venta = new Venta("V-18", null, LocalDate.now());
+        // Cantidad = 2, Precio = $500.0 -> Precio Base = $1000.0 (Umbral límite exacto)
+        // Descuento aplicable: 5% -> Total = 1000.0 * 0.95 = $950.0
+
+        // 2. Ejecución
+        double resultado = venta.calcularDescuentoTotal(2, 500.0);
+
+        // 3. Verificación
+        assertEquals(950.0, resultado, 0.001, "Un precio base exacto de $1000.0 aún pertenece al rango del 5% de descuento");
+    }
     
     /*----------------CALCULO IMPUESTO / R-05 MOVE FIELD: atributo tasaImpuestoAmbiental ----------------------------------*/
 
@@ -130,7 +174,53 @@ class VentaTest {
         // 3. Verificación
         assertEquals(475.0, totalConDescuento, 0.001, "Con 9 plantas exactas debe aplicar aún la tarifa del 5%");
     }
+    /*----------------RECAGO CLIMA / R-14 DECOMPOSE CONDITIONAL (calcularRecargoClima) ----------------------------------*/
 
+    @Test
+    public void calcularRecargoClima_MesInvernalYCostoMayorAUmbral_AplicaRecargoHeladas() {
+        // 1. Preparación
+        // Diciembre (mes 12) y costo base de $200.0 (mayor a $100.0)
+        // Fórmula Invierno: (200.0 * 1.15) + 35.0 = 230.0 + 35.0 = $265.0
+        LocalDate fechaDiciembre = LocalDate.of(2026, 12, 15);
+        Venta venta = new Venta("V-19", null, fechaDiciembre);
+
+        // 2. Ejecución
+        double costoFinal = venta.calcularRecargoClima(200.0, fechaDiciembre);
+        // double costoFinal = venta.calcularRecargoClimaRefactorizado(200.0, fechaDiciembre); // DESPUÉS DE REFACTORIZAR (usando esTemporadaInvernal())
+
+        // 3. Verificación
+        assertEquals(265.0, costoFinal, 0.001, "En invierno con costo > $100 debe aplicar el 15% de recargo más $35 de protección");
+    }
+
+    @Test
+    public void calcularRecargoClima_MesInvernalPeroCostoMenorOUmbral_AplicaTarifaNormal() {
+        // 1. Preparación
+        // Enero (mes 1) pero costo base de $100.0 (igual al umbral, no mayor)
+        // Tarifa normal: 100.0 * 1.02 = $102.0
+        LocalDate fechaEnero = LocalDate.of(2026, 1, 20);
+        Venta venta = new Venta("V-20", null, fechaEnero);
+
+        // 2. Ejecución
+        double costoFinal = venta.calcularRecargoClima(100.0, fechaEnero);
+
+        // 3. Verificación
+        assertEquals(102.0, costoFinal, 0.001, "En mes invernal con costo <= $100 solo debe aplicar la tarifa normal del 2%");
+    }
+
+    @Test
+    public void calcularRecargoClima_MesFueraDeInviernoYCostoElevado_AplicaTarifaNormal() {
+        // 1. Preparación
+        // Julio (mes 7) y costo base elevado de $500.0
+        // Tarifa normal: 500.0 * 1.02 = $510.0
+        LocalDate fechaJulio = LocalDate.of(2026, 7, 10);
+        Venta venta = new Venta("V-21", null, fechaJulio);
+
+        // 2. Ejecución
+        double costoFinal = venta.calcularRecargoClima(500.0, fechaJulio);
+
+        // 3. Verificación
+        assertEquals(510.0, costoFinal, 0.001, "Fuera de la temporada invernal solo debe aplicarse el incremento estándar del 2%");
+    }
 
     /*----------------PROCESAR PAGO / RF-15: Replace Nested Conditional (procesarPago)----------------------------------*/
 
