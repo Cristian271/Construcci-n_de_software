@@ -190,7 +190,7 @@ public class Venta {
     // SMELL: Rename Method (PDF diapositivas 128-130)
     // El nombre 'proc' es críptico, abreviado y no comunica que se trata del cálculo de tarifa exprés.
     // REFACTORIZACIÓN SUGERIDA: Renombrar el método a 'calcularRecargoEnvioExpres(double base)'.
-    public double proc(double base) {
+    public double recargar(double base) {
         return base + 50.0;
     }
 }

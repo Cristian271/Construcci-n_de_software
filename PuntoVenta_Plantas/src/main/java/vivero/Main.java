@@ -231,7 +231,7 @@ public class Main {
         double recargoClima = venta.calcularRecargoClima(costoFlete, venta.getFecha());
 
         // SMELL: Rename Method (PDF diapositivas 128-130)
-        double envioFinal = venta.proc(recargoClima);
+        double envioFinal = venta.recargar(recargoClima);
         System.out.printf("Gastos de logística y envío: $%.2f\n", envioFinal);
 
         // SMELL: Replace Magic Number with Symbolic Constant (PDF diapositivas 81-82)
