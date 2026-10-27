@@ -20,7 +20,7 @@ class VentaTest {
 
         // 2. Ejecución
         double resultado = venta.calcularDescuentoTotal(3, 400.0);
-        // double resultado = venta.calcularDescuentoTotalRefactorizado(3, 400.0); // DESPUÉS DE REFACTORIZAR (usando método basePrice())
+        // double resultado = venta.calcularDescuentoTotal(3, 400.0); // DESPUÉS DE REFACTORIZAR (usando método basePrice())
 
         // 3. Verificación
         assertEquals(1080.0, resultado, 0.001, "Para precios bases superiores a $1000.0 debe aplicar un descuento del 10%");

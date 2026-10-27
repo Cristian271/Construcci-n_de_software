@@ -16,10 +16,6 @@ public class Venta {
     // REFACTORIZACIÓN SUGERIDA: Mover este campo a 'Planta' o a una clase de catálogo de impuestos.
     public double tasaImpuestoAmbiental = 0.05;
 
-    // SMELL: Replace Array with Object (PDF diapositivas 71-72)
-    // Se usa un arreglo primitivo String[] para representar un ítem del pedido donde:
-    // posición [0] = Nombre Planta, [1] = Cantidad, [2] = Subtotal.
-    // REFACTORIZACIÓN SUGERIDA: Crear la clase 'ItemVenta' o 'LineaPedido' con atributos tipados.
     private List<String[]> lineasPedido;
 
     public Venta(String idVenta, Cliente cliente, LocalDate fecha) {
@@ -54,21 +50,20 @@ public class Venta {
         return pagada;
     }
 
-    // SMELL: Replace Temp with Query (PDF diapositivas 16-17)
-    // La variable temporal 'precioBase' almacena un cálculo que puede consultarse
-    // de forma limpia extrayéndolo a un método 'basePrice()'.
-    // REFACTORIZACIÓN SUGERIDA: Convertir 'cantidad * precioUnitario' en un método de consulta.
+    // Replace Temp with query
     public double calcularDescuentoTotal(int cantidad, double precioUnitario) {
-        double precioBase = cantidad * precioUnitario;
         double factorDescuento;
 
-        if (precioBase > 1000.0) {
+        if (calcularPrecioBase(cantidad, precioUnitario) > 1000.0) {
             factorDescuento = 0.90;
         } else {
             factorDescuento = 0.95;
         }
 
-        return precioBase * factorDescuento;
+        return calcularPrecioBase(cantidad, precioUnitario) * factorDescuento;
+    }
+    public double calcularPrecioBase(int cantidad, double precioUnitario){
+        return cantidad * precioUnitario;
     }
 
     // SMELL: Consolidate Duplicate Conditional Fragments (PDF diapositivas 113-114)
