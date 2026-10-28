@@ -59,12 +59,12 @@ class VentaTest {
     @Test
     public void tasaImpuesto_ValorPorDefecto_RetornaCincoPorCiento() {
         // 1. Preparación
-        Venta venta = new Venta("V-01", null, LocalDate.now());
-        // Planta planta = new PlantaInterior("P-01", "Monstera", 200.0, 10, "Monstera deliciosa", 70); // DESPUÉS DE REFACTORIZAR
+       // Venta venta = new Venta("V-01", null, LocalDate.now()); //ANTES
+        Planta planta = new PlantaInterior("P-01", "Monstera", 200.0, 10, "Monstera deliciosa", 70); // DESPUÉS DE REFACTORIZAR
 
         // 2. Ejecución
-        double tasa = venta.tasaImpuestoAmbiental;
-        // double tasa = planta.getTasaImpuestoAmbiental(); // DESPUÉS DE REFACTORIZAR
+        // double tasa = venta.tasaImpuestoAmbiental; //ANTES
+        double tasa = planta.getTasaImpuestoAmbiental(); // DESPUES DE REFACTORIZAR
 
         // 3. Verificación
         assertEquals(0.05, tasa, 0.001, "La tasa de impuesto ambiental inicial debe ser de 0.05");
@@ -73,13 +73,13 @@ class VentaTest {
     @Test
     public void tasaImpuesto_CalculoSobrePrecioBase_CalculaMontoCorrectamente() {
         // 1. Preparación
-        Venta venta = new Venta("V-02", null, LocalDate.now());
-        // Planta planta = new PlantaInterior("P-01", "Monstera", 200.0, 10, "Monstera deliciosa", 70); // DESPUES DE REFACTORIZAR
+        //Venta venta = new Venta("V-02", null, LocalDate.now()); //ANTES
+        Planta planta = new PlantaInterior("P-01", "Monstera", 200.0, 10, "Monstera deliciosa", 70); // DESPUES DE REFACTORIZAR
         double precioBase = 200.0;
 
         // 2. Ejecución
-        double impuestoCalculado = precioBase * venta.tasaImpuestoAmbiental;
-        // double impuestoCalculado = planta.getPrecioBase() * planta.getTasaImpuestoAmbiental(); // DESPUES DE REFACTORIZAR
+        //double impuestoCalculado = precioBase * venta.tasaImpuestoAmbiental; //ANTES
+        double impuestoCalculado = planta.getPrecioBase() * planta.getTasaImpuestoAmbiental(); // DESPUES DE REFACTORIZAR
 
         // 3. Verificación
         assertEquals(10.0, impuestoCalculado, 0.001, "El 5% de impuesto sobre $200.0 debe ser de $10.0");
@@ -88,16 +88,16 @@ class VentaTest {
     @Test
     public void tasaImpuesto_ModificacionTasa_MantieneConsistenciaEnVenta() {
         // 1. Preparación
-        Venta venta = new Venta("V-03", null, LocalDate.now());
-        // Planta planta = new PlantaInterior("P-01", "Monstera", 200.0, 10, "Monstera deliciosa", 70); // DESPUES DE REFACTORIZAR
+        //Venta venta = new Venta("V-03", null, LocalDate.now()); //ANTES
+        Planta planta = new PlantaInterior("P-01", "Monstera", 200.0, 10, "Monstera deliciosa", 70); // DESPUES DE REFACTORIZAR
 
         // 2. Ejecución
-        venta.tasaImpuestoAmbiental = 0.08;
-        // planta.setTasaImpuestoAmbiental(0.08); // DESPUÉS DE REFACTORIZAR
+        //venta.tasaImpuestoAmbiental = 0.08; //ANTES
+        planta.setTasaImpuestoAmbiental(0.08); // DESPUÉS DE REFACTORIZAR
 
         // 3. Verificación
-        assertEquals(0.08, venta.tasaImpuestoAmbiental, 0.001, "La tasa modificada debe reflejar 0.08");
-        // assertEquals(0.08, planta.getTasaImpuestoAmbiental(), 0.001, "La tasa modificada debe reflejar 0.08"); // DESPUES DE REFACTORIZAR
+        //assertEquals(0.08, venta.tasaImpuestoAmbiental, 0.001, "La tasa modificada debe reflejar 0.08"); //ANTES
+        assertEquals(0.08, planta.getTasaImpuestoAmbiental(), 0.001, "La tasa modificada debe reflejar 0.08"); // DESPUES DE REFACTORIZAR
     }
     /*----------------CALCULO TOTAL / R-10 Replace Magic Number  (calcularTotal) ----------------------------------*/
     @Test
@@ -271,7 +271,7 @@ class VentaTest {
         assertTrue(venta.isPagada(), "La venta debe actualizar su estado a pagada");
     }
 
-    /*----------------APLICAR RECARGO / RF-12: Consolidate Duplicate Conditional Fragments (aplicarDescuentoMayoreo)----------------------------------*/
+    /*----------------APLICAR RECARGO / RF-18: Rename Method (Recargar-> aplicarRecargoEnvioExpress)----------------------------------*/
 
     @Test
     public void recargo_TarifaBaseEstandar_SumaCostoFijoDeEnvioExpress() {
@@ -279,8 +279,8 @@ class VentaTest {
         Venta venta = new Venta("V-13", null, LocalDate.now());
 
         // 2. Ejecución
-        double resultado = venta.recargar(100.0);
-        // double resultado = venta.aplicarRecargoEnvioExpress(100.0); // DESPUES DE REFACTORIZAR
+        //double resultado = venta.recargar(100.0); //ANTES
+        double resultado = venta.aplicarRecargoEnvioExpress(100.0); // DESPUES DE REFACTORIZAR
 
         // 3. Verificación
         assertEquals(150.0, resultado, 0.001, "El método debe añadir $50.0 al costo base del envío");
@@ -292,8 +292,8 @@ class VentaTest {
         Venta venta = new Venta("V-14", null, LocalDate.now());
 
         // 2. Ejecución
-        double resultado = venta.recargar(0.0);
-        // double resultado = venta.aplicarRecargoEnvioExpress(0.0); // DESPUES DE REFACTORIZAR
+        //double resultado = venta.recargar(0.0); //ANTES
+        double resultado = venta.aplicarRecargoEnvioExpress(0.0); // DESPUES DE REFACTORIZAR
 
         // 3. Verificación
         assertEquals(50.0, resultado, 0.001, "Con tarifa base de $0 el total debe ser exactamente el recargo de $50.0");
@@ -305,8 +305,8 @@ class VentaTest {
         Venta venta = new Venta("V-15", null, LocalDate.now());
 
         // 2. Ejecución
-        double resultado = venta.recargar(450.50);
-        // double resultado = venta.aplicarRecargoEnvioExpress(450.50); // DESPUES DE REFACTORIZAR
+        //double resultado = venta.recargar(450.50); //ANTES
+        double resultado = venta.aplicarRecargoEnvioExpress(450.50); // DESPUES DE REFACTORIZAR
 
         // 3. Verificación
         assertEquals(500.50, resultado, 0.001, "Para una tarifa de $450.50 el total con recargo debe ser $500.50");

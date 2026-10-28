@@ -4,6 +4,7 @@ public abstract class Planta {
     protected String id;
     protected String nombreComun;
     protected int stock;
+    private double tasaImpuestoAmbiental = 0.05; //RF-05
 
     // SMELL: Encapsulate Field (PDF diapositiva 83-84)
     // El atributo es público y permite modificaciones directas sin validación desde fuera.
@@ -15,6 +16,18 @@ public abstract class Planta {
         this.nombreComun = nombreComun;
         this.precioBase = precioBase;
         this.stock = stock;
+    }
+    // Getter y Setter para el campo movido (RF-05)
+    public double getTasaImpuestoAmbiental() {
+        return tasaImpuestoAmbiental;
+    }
+
+    public void setTasaImpuestoAmbiental(double tasaImpuestoAmbiental) {
+        this.tasaImpuestoAmbiental = tasaImpuestoAmbiental;
+    }
+
+    public double getPrecioBase() {
+        return precioBase;
     }
 
     public String getId() {

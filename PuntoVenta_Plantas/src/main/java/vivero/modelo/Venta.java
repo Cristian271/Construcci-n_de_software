@@ -10,6 +10,11 @@ public class Venta {
     private LocalDate fecha;
     private boolean pagada;
 
+    // Constantes simbólicas para RF-10
+    private static final double TASA_IVA = 0.16;
+    private static final double COSTO_EMBALAJE_ESTANDAR = 25.0;
+    private static final double UMBRAL_EMBALAJE_GRATIS = 500.0;
+
     // SMELL: Move Field (PDF diapositivas 37-38)
     // La tasa de impuesto ambiental depende exclusivamente de la clasificación ecológica
     // de la planta, no del registro de la venta global.
@@ -66,30 +71,22 @@ public class Venta {
         return cantidad * precioUnitario;
     }
 
-    // SMELL: Consolidate Duplicate Conditional Fragments (PDF diapositivas 113-114)
-    // Las llamadas 'registrarHistorialDescuento()' y 'notificarSistema()' se repiten idénticas
-    // en ambas ramas del condicional.
-    // REFACTORIZACIÓN SUGERIDA: Mover las instrucciones duplicadas fuera del bloque if-else.
+    // RF-12 Extraer las sentencias duplicadas de historial y notificación fuera de la estructura if-else.
     public double aplicarDescuentoMayoreo(double subtotal, int totalPlantas) {
         double totalConDescuento;
+
         if (totalPlantas >= 10) {
-            totalConDescuento = subtotal * 0.85;
-            registrarHistorialDescuento("MAYOREO_ALTO");
-            notificarSistema();
+            totalConDescuento = subtotal * 0.85; // 15% de descuento
         } else {
-            totalConDescuento = subtotal * 0.95;
-            registrarHistorialDescuento("MAYOREO_ESTANDAR");
-            notificarSistema();
+            totalConDescuento = subtotal * 0.95; // 5% de descuento
         }
+
+        // Fragmentos que se ejecutaban en ambas ramas
+        System.out.println("Descuento aplicado (Detalles)");
+        System.out.println("Descuento aplicado por volumen: " + totalPlantas + " unidades.");
+        System.out.println("Descuento procesado para venta ID: " + this.idVenta);
+
         return totalConDescuento;
-    }
-
-    private void registrarHistorialDescuento(String motivo) {
-        // Simulación de log de auditoría interna
-    }
-
-    private void notificarSistema() {
-        // Simulación de notificación
     }
 
     // SMELL: Split Temporary Variable (PDF diapositivas 20-21)
@@ -144,48 +141,42 @@ public class Venta {
         return costoFinal;
     }
 
-    // SMELL: Replace Nested Conditional with Guard Clauses (PDF diapositivas 117-118)
-    // El flujo habitual de cobro exitoso se encuentra enterrado dentro de cuatro niveles de if-else anidados.
-    // REFACTORIZACIÓN SUGERIDA: Salir de inmediato al detectar casos inválidos usando cláusulas de guarda.
+    //RF-15 Reemplaza el anidamiento profundo por clausulas que retornan inmediatamente
     public boolean procesarPago(double montoEntregado, double montoRequerido) {
-        boolean resultado;
-        if (this.cliente != null) {
-            if (this.cliente.getDireccion() != null) {
-                if (!this.pagada) {
-                    if (montoEntregado >= montoRequerido) {
-                        this.pagada = true;
-                        resultado = true;
-                    } else {
-                        resultado = false;
-                    }
-                } else {
-                    resultado = false;
-                }
-            } else {
-                resultado = false;
-            }
-        } else {
-            resultado = false;
+        //Cliente debe existir
+        if (cliente == null) {
+            return false;
         }
-        return resultado;
+        // Cliente debe tener direccion
+        if (cliente.getDireccion() == null) {
+            return false;
+        }
+        // No procesar ventas ya pagadas
+        if (pagada) {
+            return false;
+        }
+        // Dinero dado suficiente
+        if (montoEntregado < montoRequerido) {
+            return false;
+        }
+        //  Si pasa las validaciones con exito
+        pagada = true;
+        return true;
     }
 
-    // SMELL: Replace Magic Number with Symbolic Constant (PDF diapositivas 81-82)
-    // Los números '0.16' (IVA) y '500.0' (umbral para costo de embalaje) son literales mágicos sin nombre claro.
-    // REFACTORIZACIÓN SUGERIDA: Declarar constantes estáticas: TASA_IVA y UMBRAL_EMBALAJE_GRATIS.
+    //RF-10 cambiar los numeros por constantes simbolicas con nombre
     public double calcularTotal(double subtotal) {
-        double iva = subtotal * 0.16;
-        double embalaje = 0.0;
-        if (subtotal < 500.0) {
-            embalaje = 25.0;
+        double costoEmbalaje;
+        if (subtotal<UMBRAL_EMBALAJE_GRATIS){
+            costoEmbalaje = COSTO_EMBALAJE_ESTANDAR;
+        } else {
+            costoEmbalaje = 0.0;
         }
-        return subtotal + iva + embalaje;
+        double impuestoIva = subtotal * TASA_IVA;
+        return subtotal + impuestoIva + costoEmbalaje;
     }
-
-    // SMELL: Rename Method (PDF diapositivas 128-130)
-    // El nombre 'proc' es críptico, abreviado y no comunica que se trata del cálculo de tarifa exprés.
-    // REFACTORIZACIÓN SUGERIDA: Renombrar el método a 'calcularRecargoEnvioExpres(double base)'.
-    public double recargar(double base) {
+    //RF-18 Rename Method, de recargar (ambiguo, poco descriptivo) a un nombre que se exprese mejor
+    public double aplicarRecargoEnvioExpress(double base) {
         return base + 50.0;
     }
 }
