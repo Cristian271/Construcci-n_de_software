@@ -68,4 +68,49 @@ public class PlantaTest {
         // Verificación (0.0 + 45.0)
         assertEquals(45.0, precioFinal, 0.001, "Si el precio base es 0, el precio final debe ser solo el costo del fertilizante");
     }
+
+
+    /*PRUEBAS DE ATRIBUTO BASE DE PLANTA*/
+    @Test
+    public void precioBase_LecturaYModificacionDirecta_FuncionaCorrectamente() {
+        // 1. Preparación: Instanciamos una subclase concreta (PlantaInterior)
+        Planta planta = new PlantaInterior("P-01", "Monstera Deliciosa", 280.0, 15, "Monstera deliciosa", 75);
+
+        // 2. Verificación del estado inicial accediendo al atributo público
+        assertEquals(280.0, planta.precioBase, 0.001, "El precio base inicial debe coincidir con el valor del constructor");
+
+        // 3. Ejecución: Modificación directa del atributo (el Smell actual)
+        planta.precioBase = 320.5;
+
+        // 4. Verificación del cambio
+        assertEquals(320.5, planta.precioBase, 0.001, "El precio base debe reflejar el nuevo valor asignado directamente");
+    }
+
+    @Test
+    public void precioBase_PermiteValoresInvalidos_EvidenciaNecesidadDeEncapsulamiento() {
+        // 1. Preparación
+        Planta planta = new PlantaExterior("P-02", "Cactus Órgano", 190.0, 12, "Pachycereus", true);
+
+        // 2. Ejecución: Asignar un valor ilógico (negativo)
+        planta.precioBase = -50.0;
+
+        // 3. Verificación
+        assertEquals(-50.0, planta.precioBase, 0.001,
+                "Actualmente el atributo acepta valores negativos sin validación. " +
+                        "Esto justifica encapsularlo para proteger la integridad del dato.");
+    }
+
+    @Test
+    public void precioBase_IndependenciaDeInstancias_ModificarUnaNoAfectaAOtra() {
+        // 1. Preparación: Instanciamos dos plantas distintas
+        Planta planta1 = new PlantaInterior("P-03", "Helecho", 150.0, 10, "Nephrolepis", 80);
+        Planta planta2 = new PlantaExterior("P-04", "Lavanda", 85.0, 18, "Lavandula", true);
+
+        // 2. Ejecución: Modificamos el precio base solo de la primera planta
+        planta1.precioBase = 300.0;
+
+        // 3. Verificación: Aseguramos que los objetos mantienen su estado aislado
+        assertEquals(300.0, planta1.precioBase, 0.001, "El precio de la planta 1 debió actualizarse");
+        assertEquals(85.0, planta2.precioBase, 0.001, "El precio de la planta 2 debe permanecer intacto (85.0)");
+    }
 }
