@@ -19,12 +19,12 @@ class ViveroServicioTest {
         servicio.registrarPlanta(planta);
 
         // 2. Ejecución
-        // ANTES: Un solo método consulta la planta y muta el inventario
-        Planta resultado = servicio.obtenerPlantaYDescontarStock("P-10", 3);
+        // ANTES
+        //Planta resultado = servicio.obtenerPlantaYDescontarStock("P-10", 3);
 
-        // DESPUÉS DE REFACTORIZAR: Se dividen las responsabilidades en dos llamadas limpias
-        // Planta resultado = servicio.obtenerPlantaPorId("P-10"); // Consulta pura
-        // servicio.descontarStock("P-10", 3);                    // Modificación de estado
+        // DESPUÉS DE REFACTORIZAR
+        Planta resultado = servicio.obtenerPlantaPorId("P-10"); // Consulta pura
+        servicio.descontarStock("P-10", 3);                    // Modificación de estado
 
         // 3. Verificación
         assertNotNull(resultado, "Debe retornar la instancia de la planta encontrada");
@@ -40,8 +40,8 @@ class ViveroServicioTest {
         servicio.registrarPlanta(planta);
 
         // 2. Ejecución
-        Planta resultado = servicio.obtenerPlantaYDescontarStock("P-99", 2);
-        // Planta resultado = servicio.obtenerPlantaPorId("P-99"); // DESPUÉS DE REFACTORIZAR
+        //Planta resultado = servicio.obtenerPlantaYDescontarStock("P-99", 2);
+        Planta resultado = servicio.obtenerPlantaPorId("P-99"); // DESPUÉS DE REFACTORIZAR
 
         // 3. Verificación
         assertNull(resultado, "Debe retornar null si la ID de la planta no existe en el catálogo");
@@ -56,8 +56,13 @@ class ViveroServicioTest {
         servicio.registrarPlanta(planta);
 
         // 2. Ejecución
-        servicio.obtenerPlantaYDescontarStock("P-12", 5);
-        servicio.obtenerPlantaYDescontarStock("P-12", 3);
+        //ANTES
+        //servicio.obtenerPlantaYDescontarStock("P-12", 5);
+        //servicio.obtenerPlantaYDescontarStock("P-12", 3);
+
+        // DESPUÉS DE REFACTORIZAR
+        servicio.descontarStock("P-12", 5);
+        servicio.descontarStock("P-12", 3);
 
         // 3. Verificación
         assertEquals(12, planta.getStock(), "Tras descontar 5 y luego 3 unidades, el stock restante debe ser 12");

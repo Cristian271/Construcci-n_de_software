@@ -9,6 +9,9 @@ public class Cliente {
     private String nombre;
     private DireccionEnvio direccion;
     private Membresia membresia; // Puede ser null
+
+
+    // RF-09: Encapsulate Collection
     private List<Venta> comprasPrevias;
     private Telefono telefono;
 
@@ -45,20 +48,16 @@ public class Cliente {
     public Telefono getTelefono() {
         return telefono;
     }
-
     public void setTelefono(Telefono telefono) {
         this.telefono = telefono;
     }
-
     // =========================================================================
     // REFACTORIZACIÓN: Encapsulate Collection
     // =========================================================================
-
     // El getter ahora retorna una lista inmodificable para proteger los datos internos
     public List<Venta> getComprasPrevias() {
         return Collections.unmodifiableList(this.comprasPrevias);
     }
-
     // Se ofrece un método explícito para agregar una venta al historial
     public void agregarCompra(Venta venta) {
         this.comprasPrevias.add(venta);

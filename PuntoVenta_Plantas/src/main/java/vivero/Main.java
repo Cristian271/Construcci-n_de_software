@@ -53,20 +53,17 @@ public class Main {
 
                 case "2":
                     // =========================================================================
-                    // CONSULTA DE INVENTARIO (LLAMA A MÉTODO CON CONTROL FLAG)
+                    // CONSULTA DE INVENTARIO
                     // =========================================================================
                     System.out.println("\n--- CONSULTA DE STOCK EN INVENTARIO ---");
                     System.out.print("Ingresa el nombre común de la planta a consultar: ");
                     String nombreBusqueda = scanner.nextLine().trim();
 
-                    // SMELL: Remove Control Flag (PDF diapositivas 115-116)
-                    // Se ejecuta la búsqueda interna basada en bandera booleana
                     Planta buscada = servicio.buscarPlantaPorNombre(nombreBusqueda);
                     if (buscada != null) {
                         System.out.println("\n[✓] Planta encontrada:");
                         System.out.println("    - Nombre: " + buscada.getNombreComun());
                         System.out.println("    - Ambiente: " + buscada.getTipoAmbiente());
-                        // SMELL: Encapsulate Field (PDF diapositivas 83-84)
                         System.out.printf("    - Precio base: $%.2f\n", buscada.getPrecioBase());
                         System.out.println("    - Stock disponible: " + buscada.getStock() + " unidades");
                     } else {
@@ -111,11 +108,9 @@ public class Main {
         boolean tieneMembresia = scanner.nextLine().trim().equalsIgnoreCase("s");
         Membresia membresia = tieneMembresia ? new Membresia("PLATINO", 0.15) : null;
 
-        // Smell: Extract Class (datos telefónicos fragmentados)
         Cliente cliente = new Cliente("C-" + System.currentTimeMillis() % 1000,
                 nombreCliente, direccion, membresia, "52", "9991234567", "101");
 
-        // SMELL: Encapsulate Collection (PDF diapositivas 85-88)
         System.out.println("Compras previas del cliente en historial: " + cliente.getComprasPrevias().size());
 
         Venta venta = new Venta(idVenta, cliente, LocalDate.now());
@@ -167,19 +162,14 @@ public class Main {
                     System.out.print("¿Desea incluir fertilizante especial (+$45.00)? (s/n): ");
                     boolean fertilizante = scanner.nextLine().trim().equalsIgnoreCase("s");
 
-                    // SMELL: Remove Parameter (PDF diapositivas 133-134)
                     double precioUnitarioCalculado = plantaElegida.calcularPrecioFinal(fertilizante);
 
-                    // SMELL: Replace Temp with Query (PDF diapositivas 16-17)
                     double subtotalItem = venta.calcularDescuentoTotal(cantidad, precioUnitarioCalculado);
-
-                    // SMELL: Replace Array with Object (PDF diapositivas 71-72)
                     venta.agregarLinea(plantaElegida.getNombreComun(), cantidad, precioUnitarioCalculado);
 
-                    // SMELL: Separate Query from Modifier (PDF diapositivas 135-136)
-                    servicio.obtenerPlantaYDescontarStock(plantaElegida.getId(), cantidad);
+                    servicio.obtenerPlantaPorId(plantaElegida.getId());
+                    servicio.descontarStock(plantaElegida.getId(), cantidad);
 
-                    // SMELL: Move Method (PDF diapositivas 34-36)
                     double litrosRiego = venta.calcularCuidadoRiego(plantaElegida, 7);
                     System.out.printf("-> Agregada. Cuidado sugerido: %.2f L de agua por semana.\n", litrosRiego);
 
@@ -208,33 +198,25 @@ public class Main {
         System.out.println("               RESUMEN DE VENTA                  ");
         System.out.println("=================================================");
 
-        // SMELL: Hide Delegate (PDF diapositivas 43-45)
         System.out.println("Ciudad destino: " + servicio.obtenerCiudadDestino(venta));
 
-        // SMELL: Consolidate Duplicate Conditional Fragments (PDF diapositivas 113-114)
         double totalMayoreo = venta.aplicarDescuentoMayoreo(subtotalAcumulado, totalUnidades);
         System.out.printf("Subtotal con mayoreo: $%.2f\n", totalMayoreo);
 
-        // SMELL: Introduce Null Object (PDF diapositivas 121-123)
         double totalConMembresia = servicio.calcularDescuentoCliente(cliente, totalMayoreo);
         System.out.printf("Total tras descuento de lealtad: $%.2f\n", totalConMembresia);
 
-        // SMELL: Remove Assignments to Parameters (PDF diapositivas 22-23)
         System.out.print("\nIngrese cupón de descuento (o presione ENTER si no tiene): ");
         String cupon = scanner.nextLine().trim();
         double totalConCupon = venta.aplicarCupon(totalConMembresia, cupon);
 
-        // SMELL: Split Temporary Variable (PDF diapositivas 20-21)
         double costoFlete = venta.calcularEnvio(30.0, 30.0, 40.0, 15.0);
 
-        // SMELL: Decompose Conditional (PDF diapositivas 109-110)
         double recargoClima = venta.calcularRecargoClima(costoFlete, venta.getFecha());
 
-        // SMELL: Rename Method (PDF diapositivas 128-130)
         double envioFinal = venta.aplicarRecargoEnvioExpress(recargoClima); //RF-18
         System.out.printf("Gastos de logística y envío: $%.2f\n", envioFinal);
 
-        // SMELL: Replace Magic Number with Symbolic Constant (PDF diapositivas 81-82)
         double totalPagar = venta.calcularTotal(totalConCupon) + envioFinal;
         System.out.printf("\n>>> TOTAL A PAGAR (CON IVA Y RECARGOS): $%.2f <<<\n", totalPagar);
 
@@ -259,7 +241,6 @@ public class Main {
                 break;
             }
 
-            // SMELL: Replace Nested Conditional with Guard Clauses (PDF diapositivas 117-118)
             cobrado = venta.procesarPago(efectivo, totalPagar);
 
             if (cobrado) {
@@ -267,7 +248,6 @@ public class Main {
                 System.out.println("\n[✓] Pago procesado con éxito.");
                 System.out.printf("[✓] Su cambio: $%.2f\n", cambio);
                 servicio.registrarVenta(venta);
-                // Inserción directa en colección mutable (Smell)
                 cliente.getComprasPrevias().add(venta);
             } else {
                 System.out.printf("\n[X] Monto insuficiente. Faltan: $%.2f. Intente nuevamente.\n", (totalPagar - efectivo));

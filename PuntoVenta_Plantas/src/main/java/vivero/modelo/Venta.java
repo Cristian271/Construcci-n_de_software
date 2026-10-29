@@ -15,12 +15,10 @@ public class Venta {
     private static final double COSTO_EMBALAJE_ESTANDAR = 25.0;
     private static final double UMBRAL_EMBALAJE_GRATIS = 500.0;
 
-    // SMELL: Move Field (PDF diapositivas 37-38)
-    // La tasa de impuesto ambiental depende exclusivamente de la clasificación ecológica
-    // de la planta, no del registro de la venta global.
-    // REFACTORIZACIÓN SUGERIDA: Mover este campo a 'Planta' o a una clase de catálogo de impuestos.
+    // RF-05: Move Field
     public double tasaImpuestoAmbiental = 0.05;
 
+    //Atributo RF-11: Replace Array with Object
     private List<String[]> lineasPedido;
 
     public Venta(String idVenta, Cliente cliente, LocalDate fecha) {
@@ -30,7 +28,7 @@ public class Venta {
         this.lineasPedido = new ArrayList<>();
         this.pagada = false;
     }
-
+    //Método RF-11: Replace Array with Object
     public void agregarLinea(String nombrePlanta, int cantidad, double precioUnitario) {
         String[] item = new String[3];
         item[0] = nombrePlanta;
@@ -55,7 +53,7 @@ public class Venta {
         return pagada;
     }
 
-    // Replace Temp with query
+    // RF-01: Replace Temp with query
     public double calcularDescuentoTotal(int cantidad, double precioUnitario) {
         double factorDescuento;
 
@@ -89,7 +87,7 @@ public class Venta {
         return totalConDescuento;
     }
 
-    // REFACTORIZACIÓN REALIZADA: Split Temporary Variable
+    // RF-02: Split Temporary Variable
     public double calcularEnvio(double alto, double ancho, double profundidad, double distanciaKm) {
         double volumen = alto * ancho * profundidad; // Responsabilidad 1: volumen
         System.out.println("Volumen calculado de la carga: " + volumen);
@@ -99,9 +97,7 @@ public class Venta {
         return costo;
     }
 
-    // SMELL: Remove Assignments to Parameters (PDF diapositivas 22-23)
-    // El parámetro recibido 'montoTotal' es modificado y reasignado directamente en el cuerpo del método.
-    // REFACTORIZACIÓN SUGERIDA: Usar una variable local 'resultado' en lugar de reasignar el parámetro.
+    // RF-03: Remove Assignments to Parameters
     public double aplicarCupon(double montoTotal, String cupon) {
         if (cupon != null && cupon.equals("PRIMAVERA20")) {
             montoTotal = montoTotal - 20.0;
@@ -112,10 +108,7 @@ public class Venta {
         return montoTotal;
     }
 
-    // SMELL: Move Method (PDF diapositivas 34-36)
-    // Este método utiliza exclusivamente atributos y reglas biológicas de la 'Planta'
-    // sin hacer uso del estado propio de 'Venta'.
-    // REFACTORIZACIÓN SUGERIDA: Mover este método a la clase 'Planta'.
+    // RF-04: Move Method
     public double calcularCuidadoRiego(Planta planta, int diasSoleados) {
         double aguaDiaria = 0.25;
         if (planta.getTipoAmbiente().equals("EXTERIOR")) {
@@ -124,18 +117,27 @@ public class Venta {
         return aguaDiaria * diasSoleados;
     }
 
-    // SMELL: Decompose Conditional (PDF diapositivas 109-110)
-    // El if contiene una condición compleja difícil de leer y las ramas ejecutan fórmulas extensas.
-    // REFACTORIZACIÓN SUGERIDA: Extraer la condición a un método booleano (ej. 'esTemporadaInvernal()')
-    // y cada cálculo a su respectivo método ('tarifaInvierno()', 'tarifaVerano()').
+    // RF-13: Decompose Conditional
     public double calcularRecargoClima(double costoBase, LocalDate fechaPedido) {
-        double costoFinal;
-        if ((fechaPedido.getMonthValue() == 12 || fechaPedido.getMonthValue() <= 2) && costoBase > 100.0) {
-            costoFinal = (costoBase * 1.15) + 35.0; // Recargo de protección contra heladas
-        } else {
-            costoFinal = costoBase * 1.02; // Tarifa normal de temporada
+        if (esTemporadaInvernal(fechaPedido, costoBase)) {
+            return calcularTarifaInvierno(costoBase);
         }
-        return costoFinal;
+        return calcularTarifaNormal(costoBase);
+    }
+    private boolean esTemporadaInvernal(LocalDate fecha, double costoBase) {
+        boolean esMesInvernal = (fecha.getMonthValue() == 12 || fecha.getMonthValue() <= 2);
+        boolean superaUmbralMinimo = costoBase > 100.0;
+        return esMesInvernal && superaUmbralMinimo;
+    }
+
+    private double calcularTarifaInvierno(double costoBase) {
+        double recargoPorHeladas = costoBase * 0.15;
+        double empaqueProtector = 35.0;
+        return costoBase + recargoPorHeladas + empaqueProtector;
+    }
+
+    private double calcularTarifaNormal(double costoBase) {
+        return costoBase * 1.02;
     }
 
     //RF-15 Reemplaza el anidamiento profundo por clausulas que retornan inmediatamente

@@ -186,7 +186,7 @@ class VentaTest {
 
         // 2. Ejecución
         double costoFinal = venta.calcularRecargoClima(200.0, fechaDiciembre);
-        // double costoFinal = venta.calcularRecargoClimaRefactorizado(200.0, fechaDiciembre); // DESPUÉS DE REFACTORIZAR (usando esTemporadaInvernal())
+        // double costoFinal = venta.calcularRecargoClima(200.0, fechaDiciembre); // DESPUÉS DE REFACTORIZAR (usando esTemporadaInvernal())
 
         // 3. Verificación
         assertEquals(265.0, costoFinal, 0.001, "En invierno con costo > $100 debe aplicar el 15% de recargo más $35 de protección");

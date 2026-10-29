@@ -6,8 +6,8 @@ public abstract class Planta {
     protected int stock;
     private double tasaImpuestoAmbiental = 0.05; //RF-05
 
-    // REFACTORIZACION ENCAPSUALTE FIELD
-    private double precioBase;
+    // RF-08: Encapsulate Field
+    public double precioBase;
 
     public Planta(String id, String nombreComun, double precioBase, int stock) {
         this.id = id;
@@ -44,7 +44,7 @@ public abstract class Planta {
         this.stock = stock;
     }
 
-    // REFACTORIZACION: Remove Parameter
+    // RF-17: Remove Parameter
     public double calcularPrecioFinal(boolean incluyeFertilizante) {
         double total = this.precioBase;
         if (incluyeFertilizante) {
@@ -52,7 +52,6 @@ public abstract class Planta {
         }
         return total;
     }
-
     public void setPrecioBase(double precioBase) {
         this.precioBase = precioBase;
     }
