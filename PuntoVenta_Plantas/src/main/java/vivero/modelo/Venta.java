@@ -89,17 +89,14 @@ public class Venta {
         return totalConDescuento;
     }
 
-    // SMELL: Split Temporary Variable (PDF diapositivas 20-21)
-    // La variable 'temp' almacena primero el volumen del contenedor y luego se reasigna
-    // para calcular la tarifa de flete, cumpliendo dos propósitos distintos.
-    // REFACTORIZACIÓN SUGERIDA: Crear dos variables finales separadas (ej. 'volumen' y 'costoFlete').
+    // REFACTORIZACIÓN REALIZADA: Split Temporary Variable
     public double calcularEnvio(double alto, double ancho, double profundidad, double distanciaKm) {
-        double temp = alto * ancho * profundidad; // Responsabilidad 1: volumen
-        System.out.println("Volumen calculado de la carga: " + temp);
+        double volumen = alto * ancho * profundidad; // Responsabilidad 1: volumen
+        System.out.println("Volumen calculado de la carga: " + volumen);
 
-        temp = (distanciaKm * 3.5) + (temp * 0.02); // Responsabilidad 2: costo de envío
-        System.out.println("Costo total de flete: " + temp);
-        return temp;
+        double costo = (distanciaKm * 3.5) + (volumen * 0.02); // Responsabilidad 2: costo de envío
+        System.out.println("Costo total de flete: " + costo);
+        return costo;
     }
 
     // SMELL: Remove Assignments to Parameters (PDF diapositivas 22-23)

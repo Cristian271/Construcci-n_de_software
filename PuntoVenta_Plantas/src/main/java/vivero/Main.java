@@ -67,7 +67,7 @@ public class Main {
                         System.out.println("    - Nombre: " + buscada.getNombreComun());
                         System.out.println("    - Ambiente: " + buscada.getTipoAmbiente());
                         // SMELL: Encapsulate Field (PDF diapositivas 83-84)
-                        System.out.printf("    - Precio base: $%.2f\n", buscada.precioBase);
+                        System.out.printf("    - Precio base: $%.2f\n", buscada.getPrecioBase());
                         System.out.println("    - Stock disponible: " + buscada.getStock() + " unidades");
                     } else {
                         System.out.println("\n[X] No se encontró ninguna planta con el nombre: '" + nombreBusqueda + "'.");
@@ -133,7 +133,7 @@ public class Main {
                         (i + 1),
                         catalogo[i].getNombreComun(),
                         catalogo[i].getTipoAmbiente(),
-                        catalogo[i].precioBase,
+                        catalogo[i].getPrecioBase(),
                         catalogo[i].getStock());
             }
             System.out.println("[0] Proceder al cobro de las plantas seleccionadas");
@@ -168,7 +168,7 @@ public class Main {
                     boolean fertilizante = scanner.nextLine().trim().equalsIgnoreCase("s");
 
                     // SMELL: Remove Parameter (PDF diapositivas 133-134)
-                    double precioUnitarioCalculado = plantaElegida.calcularPrecioFinal(75.0, fertilizante);
+                    double precioUnitarioCalculado = plantaElegida.calcularPrecioFinal(fertilizante);
 
                     // SMELL: Replace Temp with Query (PDF diapositivas 16-17)
                     double subtotalItem = venta.calcularDescuentoTotal(cantidad, precioUnitarioCalculado);

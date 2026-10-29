@@ -6,10 +6,8 @@ public abstract class Planta {
     protected int stock;
     private double tasaImpuestoAmbiental = 0.05; //RF-05
 
-    // SMELL: Encapsulate Field (PDF diapositiva 83-84)
-    // El atributo es público y permite modificaciones directas sin validación desde fuera.
-    // REFACTORIZACIÓN SUGERIDA: Volver el campo privado y proveer métodos get y set con validación.
-    public double precioBase;
+    // REFACTORIZACION ENCAPSUALTE FIELD
+    private double precioBase;
 
     public Planta(String id, String nombreComun, double precioBase, int stock) {
         this.id = id;
@@ -46,15 +44,17 @@ public abstract class Planta {
         this.stock = stock;
     }
 
-    // SMELL: Remove Parameter (PDF diapositiva 133-134)
-    // El parámetro 'porcentajeLuz' se recibe obligatoriamente en todas las llamadas pero nunca se utiliza en el cuerpo.
-    // REFACTORIZACIÓN SUGERIDA: Eliminar el parámetro 'porcentajeLuz' de la firma del método.
-    public double calcularPrecioFinal(double porcentajeLuz, boolean incluyeFertilizante) {
+    // REFACTORIZACION: Remove Parameter
+    public double calcularPrecioFinal(boolean incluyeFertilizante) {
         double total = this.precioBase;
         if (incluyeFertilizante) {
             total += 45.0;
         }
         return total;
+    }
+
+    public void setPrecioBase(double precioBase) {
+        this.precioBase = precioBase;
     }
 
     public abstract String getTipoAmbiente();

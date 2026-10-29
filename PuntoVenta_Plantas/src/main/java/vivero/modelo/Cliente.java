@@ -1,6 +1,7 @@
 package vivero.modelo;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Cliente {
@@ -8,20 +9,8 @@ public class Cliente {
     private String nombre;
     private DireccionEnvio direccion;
     private Membresia membresia; // Puede ser null
-
-    // SMELL: Extract Class (PDF diapositivas 39-41)
-    // 'Cliente' está acumulando datos y responsabilidades de números telefónicos
-    // que cambian juntos y forman un concepto propio (código país, número, extensión).
-    // REFACTORIZACIÓN SUGERIDA: Extraer estos campos a una clase dedicada 'Telefono'.
-    private String telefonoCodigoPais;
-    private String telefonoNumero;
-    private String telefonoExtension;
-
-    // SMELL: Encapsulate Collection (PDF diapositivas 85-88)
-    // La colección interna se expone directamente a través del getter sin protección.
-    // REFACTORIZACIÓN SUGERIDA: Retornar Collections.unmodifiableList(...) y ofrecer
-    // métodos explícitos como 'agregarCompra(Venta v)'.
     private List<Venta> comprasPrevias;
+    private Telefono telefono;
 
     public Cliente(String id, String nombre, DireccionEnvio direccion, Membresia membresia,
                    String telefonoCodigoPais, String telefonoNumero, String telefonoExtension) {
@@ -29,10 +18,8 @@ public class Cliente {
         this.nombre = nombre;
         this.direccion = direccion;
         this.membresia = membresia;
-        this.telefonoCodigoPais = telefonoCodigoPais;
-        this.telefonoNumero = telefonoNumero;
-        this.telefonoExtension = telefonoExtension;
         this.comprasPrevias = new ArrayList<>();
+        this.telefono = new Telefono(telefonoCodigoPais, telefonoNumero, telefonoExtension);
     }
 
     public String getId() {
@@ -55,37 +42,25 @@ public class Cliente {
         this.membresia = membresia;
     }
 
-    // Métodos asociados al smell 'Extract Class'
-    public String getTelefonoCompleto() {
-        return "+" + telefonoCodigoPais + " (" + telefonoNumero + ") ext. " + telefonoExtension;
+    public Telefono getTelefono() {
+        return telefono;
     }
 
-    public String getTelefonoCodigoPais() {
-        return telefonoCodigoPais;
+    public void setTelefono(Telefono telefono) {
+        this.telefono = telefono;
     }
 
-    public void setTelefonoCodigoPais(String telefonoCodigoPais) {
-        this.telefonoCodigoPais = telefonoCodigoPais;
-    }
+    // =========================================================================
+    // REFACTORIZACIÓN: Encapsulate Collection
+    // =========================================================================
 
-    public String getTelefonoNumero() {
-        return telefonoNumero;
-    }
-
-    public void setTelefonoNumero(String telefonoNumero) {
-        this.telefonoNumero = telefonoNumero;
-    }
-
-    public String getTelefonoExtension() {
-        return telefonoExtension;
-    }
-
-    public void setTelefonoExtension(String telefonoExtension) {
-        this.telefonoExtension = telefonoExtension;
-    }
-
-    // Método con smell 'Encapsulate Collection'
+    // El getter ahora retorna una lista inmodificable para proteger los datos internos
     public List<Venta> getComprasPrevias() {
-        return this.comprasPrevias;
+        return Collections.unmodifiableList(this.comprasPrevias);
+    }
+
+    // Se ofrece un método explícito para agregar una venta al historial
+    public void agregarCompra(Venta venta) {
+        this.comprasPrevias.add(venta);
     }
 }
