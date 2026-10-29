@@ -6,14 +6,27 @@ public abstract class Planta {
     protected int stock;
     private double tasaImpuestoAmbiental = 0.05; //RF-05
 
+    // RF-20: Pull Up Field
+    protected String nombreCientifico;
+
     // RF-08: Encapsulate Field
     public double precioBase;
 
     public Planta(String id, String nombreComun, double precioBase, int stock) {
+        this(id, nombreComun, precioBase, stock, "");
+    }
+
+    // RF-20: Pull Up Constructor Body
+    public Planta(String id, String nombreComun, double precioBase, int stock, String nombreCientifico) {
         this.id = id;
         this.nombreComun = nombreComun;
         this.precioBase = precioBase;
         this.stock = stock;
+        this.nombreCientifico = nombreCientifico;
+    }
+
+    public String getNombreCientifico() {
+        return nombreCientifico;
     }
     // Getter y Setter para el campo movido (RF-05)
     public double getTasaImpuestoAmbiental() {

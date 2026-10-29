@@ -25,35 +25,26 @@ public class ViveroServicio {
     }
 
     // RF-07: Hide Delegate
-     public String obtenerCiudadDestino(Venta venta) {
-        return venta.getCliente().getDireccion().getCiudad();
+    public String obtenerCiudadDestino(Venta venta) {
+        return venta.getCiudadDestino();
     }
 
     // RF-16: Introduce Null Object
     public double calcularDescuentoCliente(Cliente cliente, double total) {
-        double porcentaje = 0.0;
-        if (cliente.getMembresia() == null) {
-            porcentaje = 0.0;
-        } else {
-            porcentaje = cliente.getMembresia().getPorcentajeDescuento();
-        }
+        double porcentaje = cliente.getMembresia().getPorcentajeDescuento();
         return total * (1.0 - porcentaje);
     }
 
     // RF-14: Remove Control Flag
+    // Ahora el ciclo retorna inmediatamente al hallar la primera coincidencia
+    // ignorando mayúsculas y minúsculas, o null si no hay coincidencias
     public Planta buscarPlantaPorNombre(String nombre) {
-        Planta resultado = null;
-        boolean encontrado = false;
-
-        for (int i = 0; i < inventario.size(); i++) {
-            if (!encontrado) {
-                if (inventario.get(i).getNombreComun().equalsIgnoreCase(nombre)) {
-                    resultado = inventario.get(i);
-                    encontrado = true;
-                }
+        for (Planta planta : inventario) {
+            if (planta.getNombreComun().equalsIgnoreCase(nombre)) {
+                return planta;
             }
         }
-        return resultado;
+        return null;
     }
 
     // RF-19: Separate Query from Modifier

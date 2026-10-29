@@ -99,13 +99,20 @@ public class Venta {
 
     // RF-03: Remove Assignments to Parameters
     public double aplicarCupon(double montoTotal, String cupon) {
+        //se eliminan las reasignaciones y se crea la variable local resultado
+        double resultado = montoTotal;
         if (cupon != null && cupon.equals("PRIMAVERA20")) {
-            montoTotal = montoTotal - 20.0;
+            resultado = resultado - 20.0;
         }
-        if (montoTotal < 0.0) {
-            montoTotal = 0.0;
+        if (resultado < 0.0) {
+            resultado = 0.0;
         }
-        return montoTotal;
+        return resultado;
+    }
+
+    // RF-07: Hide Delegate
+    public String getCiudadDestino() {
+        return cliente.getCiudad();
     }
 
     // RF-04: Move Method

@@ -2,6 +2,7 @@ package vivero.modelo;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PlantaTest {
     // CalcularPrecioFinal
@@ -136,5 +137,43 @@ public class PlantaTest {
     */
         assertEquals(300.0, planta1.getPrecioBase(), 0.001, "El precio de la planta 1 debió actualizarse");
         assertEquals(85.0, planta2.getPrecioBase(), 0.001, "El precio de la planta 2 debe permanecer intacto (85.0)");
+    }
+
+    /*----------------RF- 20 / PULL UP FIELD & PULL UP CONSTRUCTOR BODY  ----------------------------------*/
+
+    @Test
+    public void plantaInterior_ConstructorYGetters_RetornaValoresCorrectos() {
+        // 1. Preparación y Ejecución
+        // PlantaInterior("P-01", "Monstera Deliciosa", 280.0, 15, "Monstera deliciosa", 75)
+        PlantaInterior interior = new PlantaInterior("P-01", "Monstera Deliciosa", 280.0, 15, "Monstera deliciosa", 75);
+
+        // 2. Verificación de atributos comunes
+        assertEquals("P-01", interior.getId(), "El ID debe ser P-01");
+        assertEquals("Monstera Deliciosa", interior.getNombreComun(), "El nombre común debe ser Monstera Deliciosa");
+        assertEquals(280.0, interior.getPrecioBase(), 0.001, "El precio base debe ser 280.0");
+        assertEquals(15, interior.getStock(), "El stock debe ser 15");
+
+        // 3. Verificación de nombre científico, ambiente y atributo específico
+        assertEquals("Monstera deliciosa", interior.getNombreCientifico(), "El nombre científico debe ser 'Monstera deliciosa'");
+        assertEquals(75, interior.getNivelHumedadRequerido(), "El nivel de humedad requerido debe ser 75");
+        assertEquals("INTERIOR", interior.getTipoAmbiente(), "El ambiente debe ser INTERIOR");
+    }
+
+    @Test
+    public void plantaExterior_ConstructorYGetters_RetornaValoresCorrectos() {
+        // 1. Preparación y Ejecución
+        // PlantaExterior("P-06", "Bugambilia", 110.0, 30, "Bougainvillea spectabilis", true)
+        PlantaExterior exterior = new PlantaExterior("P-06", "Bugambilia", 110.0, 30, "Bougainvillea spectabilis", true);
+
+        // 2. Verificación de atributos comunes
+        assertEquals("P-06", exterior.getId(), "El ID debe ser P-06");
+        assertEquals("Bugambilia", exterior.getNombreComun(), "El nombre común debe ser Bugambilia");
+        assertEquals(110.0, exterior.getPrecioBase(), 0.001, "El precio base debe ser 110.0");
+        assertEquals(30, exterior.getStock(), "El stock debe ser 30");
+
+        // 3. Verificación de nombre científico, ambiente y atributo específico
+        assertEquals("Bougainvillea spectabilis", exterior.getNombreCientifico(), "El nombre científico debe ser 'Bougainvillea spectabilis'");
+        assertTrue(exterior.isToleraHeladas(), "toleraHeladas debe ser true");
+        assertEquals("EXTERIOR", exterior.getTipoAmbiente(), "El ambiente debe ser EXTERIOR");
     }
 }

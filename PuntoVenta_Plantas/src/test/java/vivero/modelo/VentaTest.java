@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 class VentaTest {
     /*----------------CALCULO DESCUENTO / R-01 REPLACE TEMP WITH QUERY (calcularDescuentoTotal) ----------------------------------*/
@@ -356,5 +358,67 @@ class VentaTest {
 
         // 3. Verificación
         assertEquals(350.02, costoEnvio, 0.001, "El costo para un paquete pequeño a larga distancia no se calculó correctamente");
+    }
+
+    /*----------------RF-03 / REMOVE ASSIGNMENTS TO PARAMETERS (aplicarCupon) ----------------------------------*/
+
+    @Test
+    public void aplicarCupon_CuponPrimavera20_RestaVeinteAlMonto() {
+        // 1. Preparación
+        Venta venta = new Venta("V-22", null, LocalDate.now());
+
+        // 2. Ejecución (Monto 100 con "PRIMAVERA20" -> 80.0)
+        double resultado = venta.aplicarCupon(100.0, "PRIMAVERA20");
+
+        // 3. Verificación
+        assertEquals(80.0, resultado, 0.001, "Con el cupón 'PRIMAVERA20' se deben restar $20.0 al monto de 100.0");
+    }
+
+    @Test
+    public void aplicarCupon_CuponNulo_MantieneMontoOriginal() {
+        // 1. Preparación
+        Venta venta = new Venta("V-23", null, LocalDate.now());
+
+        // 2. Ejecución (Monto 100 con cupón null -> 100)
+        double resultado = venta.aplicarCupon(100.0, null);
+
+        // 3. Verificación
+        assertEquals(100.0, resultado, 0.001, "Con un cupón nulo el monto debe conservarse sin cambios");
+    }
+
+    @Test
+    public void aplicarCupon_CuponInvalido_MantieneMontoOriginal() {
+        // 1. Preparación
+        Venta venta = new Venta("V-24", null, LocalDate.now());
+
+        // 2. Ejecución (Monto 100 con cupón inválido u otro distinto -> 100)
+        double resultado = venta.aplicarCupon(100.0, "VERANO20");
+
+        // 3. Verificación
+        assertEquals(100.0, resultado, 0.001, "Con un cupón inválido o distinto el monto debe conservarse sin cambios");
+    }
+
+    @Test
+    public void aplicarCupon_MontoExactoVeinteConCuponPrimavera20_RetornaCero() {
+        // 1. Preparación
+        Venta venta = new Venta("V-25", null, LocalDate.now());
+
+        // 2. Ejecución (Monto 20 con "PRIMAVERA20" -> 0.0)
+        double resultado = venta.aplicarCupon(20.0, "PRIMAVERA20");
+
+        // 3. Verificación
+        assertEquals(0.0, resultado, 0.001, "Con monto de $20.0 y cupón 'PRIMAVERA20' el resultado debe ser exactamente $0.0");
+    }
+
+    @Test
+    public void aplicarCupon_CuponEnminusculas_NoAplicaDescuento() {
+        // 1. Preparación
+        Venta venta = new Venta("V-26", null, LocalDate.now());
+
+        // 2. Ejecución (Cupón en minúsculas 'primavera20' -> sin descuento)
+        double resultado = venta.aplicarCupon(100.0, "primavera20");
+
+        // 3. Verificación
+        assertEquals(100.0, resultado, 0.001, "El cupón en minúsculas no debe ser reconocido y no aplica descuento");
     }
 }

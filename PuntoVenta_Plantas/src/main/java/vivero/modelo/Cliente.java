@@ -20,7 +20,7 @@ public class Cliente {
         this.id = id;
         this.nombre = nombre;
         this.direccion = direccion;
-        this.membresia = membresia;
+        this.membresia = (membresia != null) ? membresia : new MembresiaNula();
         this.comprasPrevias = new ArrayList<>();
         this.telefono = new Telefono(telefonoCodigoPais, telefonoNumero, telefonoExtension);
     }
@@ -37,12 +37,17 @@ public class Cliente {
         return direccion;
     }
 
+    // RF-07: Hide Delegate
+    public String getCiudad() {
+        return direccion.getCiudad();
+    }
+
     public Membresia getMembresia() {
         return membresia;
     }
 
     public void setMembresia(Membresia membresia) {
-        this.membresia = membresia;
+        this.membresia = (membresia != null) ? membresia : new MembresiaNula();
     }
 
     public Telefono getTelefono() {
