@@ -1,0 +1,48 @@
+{
+  "name": "proyectofinal",
+  "version": "1.0.0",
+  "description": "Sistema de Gestión de Turnos Universitarios (SGT) con patrón MVC y Electron",
+  "author": "Equipo SGT",
+  "main": "index.js",
+  "scripts": {
+    "dev": "electron .",
+    "test": "jest",
+    "build": "electron-builder"
+  },
+  "keywords": [
+    "turnos",
+    "electron",
+    "mvc",
+    "fifo"
+  ],
+  "type": "commonjs",
+  "build": {
+    "appId": "mx.uady.construccion.sgt",
+    "productName": "Sistema de Gestion de Turnos",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "index.js",
+      "src/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        "portable"
+      ],
+      "signAndEditExecutable": false
+    }
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/pruebas/**/*.test.js"
+    ]
+  },
+  "devDependencies": {
+    "electron": "^45.4.1",
+    "electron-builder": "^26.18.0",
+    "jest": "^30.5.2"
+  }
+}

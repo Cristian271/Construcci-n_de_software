@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión de Turnos Universitarios (SGT)</title>
+    <link rel="stylesheet" href="./estilos.css">
+</head>
+<body>
+    <header class="encabezado">
+        <div class="encabezado-titulo">
+            <h1>Sistema de Gestión de Turnos Universitarios</h1>
+            <p class="subtitulo">
+                Cola única FIFO y control operativo de ventanillas V01–V03
+            </p>
+        </div>
+        <div class="encabezado-acciones">
+            <div class="caja-temporizador">
+                <span class="etiqueta-temporizador">Próxima llegada:</span>
+                <strong id="contadorLlegada" class="valor-temporizador">
+                    30 s
+                </strong>
+                <button
+                    id="botonPausarLlegadas"
+                    type="button"
+                    class="boton boton-secundario"
+                >
+                    Pausar llegadas
+                </button>
+            </div>
+            <button
+                id="botonRegistrarTurno"
+                type="button"
+                class="boton boton-primario"
+            >
+                Registrar turno
+            </button>
+            <button
+                id="botonActualizar"
+                type="button"
+                class="boton boton-secundario"
+            >
+                Actualizar vista
+            </button>
+        </div>
+    </header>
+
+    <main class="contenedor-principal">
+        <section
+            id="panelMensaje"
+            class="panel-mensaje mensaje-info"
+            role="status"
+            aria-live="polite"
+        >
+            <span id="iconoMensaje" class="icono-mensaje">ℹ</span>
+            <span id="textoMensaje">Cargando estado del sistema...</span>
+        </section>
+
+        <section class="seccion" aria-labelledby="tituloVentanillas">
+            <div class="seccion-encabezado">
+                <h2 id="tituloVentanillas">Ventanillas de atención</h2>
+                <div class="leyenda-indicadores">
+                    <span class="leyenda-item">
+                        <span class="indicador-luz indicador-verde"></span>
+                        Verde: Libre
+                    </span>
+                    <span class="leyenda-item">
+                        <span class="indicador-luz indicador-rojo"></span>
+                        Rojo: Ocupada
+                    </span>
+                </div>
+            </div>
+            <div id="contenedorVentanillas" class="rejilla-ventanillas"></div>
+        </section>
+
+        <div class="rejilla-media">
+            <section class="seccion" aria-labelledby="tituloFila">
+                <div class="seccion-encabezado">
+                    <h2 id="tituloFila">Fila de espera (FIFO)</h2>
+                    <span id="contadorFila" class="insignia-conteo">
+                        0 en espera
+                    </span>
+                </div>
+                <div class="contenedor-tabla">
+                    <table class="tabla">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Secuencia</th>
+                                <th>Fecha y hora de registro</th>
+                                <th>Estado</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cuerpoTablaFila"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="seccion" aria-labelledby="tituloCancelar">
+                <div class="seccion-encabezado">
+                    <h2 id="tituloCancelar">Cancelar turno por ID</h2>
+                </div>
+                <p class="texto-ayuda">
+                    Solo los turnos en estado En espera pueden cancelarse.
+                    El registro permanece en el historial.
+                </p>
+                <form id="formularioCancelar" class="formulario-cancelar">
+                    <label for="campoIdCancelar" class="etiqueta-campo">
+                        Identificador del turno
+                    </label>
+                    <div class="grupo-entrada">
+                        <input
+                            id="campoIdCancelar"
+                            type="text"
+                            class="campo-texto"
+                            placeholder="Ejemplo: T-001"
+                            autocomplete="off"
+                        >
+                        <button
+                            id="botonCancelarPorId"
+                            type="submit"
+                            class="boton boton-peligro"
+                        >
+                            Cancelar
+                        </button>
+                    </div>
+                </form>
+                <div class="resumen-estados" id="resumenEstados"></div>
+            </section>
+        </div>
+
+        <section class="seccion" aria-labelledby="tituloHistorial">
+            <div class="seccion-encabezado">
+                <h2 id="tituloHistorial">Historial de turnos</h2>
+                <span id="contadorHistorial" class="insignia-conteo">
+                    0 registrados
+                </span>
+            </div>
+            <div class="contenedor-tabla">
+                <table class="tabla">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Secuencia</th>
+                            <th>Fecha y hora de registro</th>
+                            <th>Estado</th>
+                            <th>Ventanilla asignada</th>
+                            <th>Tiempo asignado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpoTablaHistorial"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <div
+        id="modalConfirmacion"
+        class="fondo-modal oculto"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="tituloModal"
+    >
+        <div class="caja-modal">
+            <h3 id="tituloModal">Confirmar cancelación de turno</h3>
+            <p id="textoModalConfirmacion" class="texto-modal"></p>
+            <div class="acciones-modal">
+                <button
+                    id="botonRechazarModal"
+                    type="button"
+                    class="boton boton-secundario"
+                >
+                    No cancelar
+                </button>
+                <button
+                    id="botonAceptarModal"
+                    type="button"
+                    class="boton boton-peligro"
+                >
+                    Confirmar cancelación
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="./aplicacion.js"></script>
+</body>
+</html>
